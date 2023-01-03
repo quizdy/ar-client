@@ -1,6 +1,9 @@
 <template>
   <div>
-    <Camera />
+    <CameraTest />
+    <!-- <Compus /> -->
+    <!-- <Gps /> -->
+    <!-- <Simple /> -->
   </div>
 </template>
 <script setup></script>

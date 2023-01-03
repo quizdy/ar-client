@@ -1,18 +1,19 @@
 {
-    "private": true,
-    "scripts": {
-        "build": "nuxt build",
-        "dev": "nuxt dev",
-        "generate": "nuxt generate",
-        "preview": "nuxt preview",
-        "postinstall": "nuxt prepare",
-        "clean": "npm cache clean --force"
-    },
-    "devDependencies": {
-        "nuxt": "3.0.0"
-    },
-    "dependencies": {
-        "fs": "^0.0.1-security",
-        "path": "^0.12.7"
-    }
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "clean": "npm cache clean --force",
+    "devs": "npx nuxi dev --https --ssl-cert ./keys/192.168.17.63.pem --ssl-key ./keys/192.168.17.63-key.pem"
+  },
+  "devDependencies": {
+    "nuxt": "3.0.0"
+  },
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7"
+  }
 }
