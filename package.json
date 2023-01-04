@@ -7,12 +7,15 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "clean": "npm cache clean --force",
-    "devs": "npx nuxi dev --https --ssl-cert ./keys/192.168.17.63.pem --ssl-key ./keys/192.168.17.63-key.pem"
+    "devs": "npx nuxi dev --https --ssl-cert ./keys/192.168.17.63.pem --ssl-key ./keys/192.168.17.63-key.pem",
+    "nit": "npx nuxi dev --https --ssl-cert ./keys/nitech.pem --ssl-key ./keys/nitech-key.pem"
   },
   "devDependencies": {
+    "@types/google.maps": "^3.51.0",
     "nuxt": "3.0.0"
   },
   "dependencies": {
+    "@googlemaps/js-api-loader": "^1.15.1",
     "fs": "^0.0.1-security",
     "path": "^0.12.7"
   }
