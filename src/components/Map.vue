@@ -13,7 +13,8 @@ const $config = useRuntimeConfig();
 
 onMounted(() => {
   const loader = new Loader({
-    apiKey: $config.gmapApiKey,
+    //apiKey: $config.gmapApiKey,
+    apiKey: "AIzaSyCYsLDv3eHNGZ-HFcXUjoA5r442Aj10ND0",
     version: "weekly",
     libraries: ["places"],
   });
