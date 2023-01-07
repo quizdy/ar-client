@@ -1,10 +1,10 @@
 <template>
   <div>
-    <!-- <CameraTest /> -->
+    <CameraTest />
     <!-- <Compus /> -->
     <!-- <Gps /> -->
     <!-- <Simple /> -->
-    <Map />
+    <!-- <Map /> -->
   </div>
 </template>
 <script setup></script>
