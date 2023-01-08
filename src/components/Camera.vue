@@ -36,7 +36,7 @@ const pos = reactive({
 const target = {
   name: "test",
   img: "/_nuxt/assets/images/question.png",
-  pic: "/_nuxt/assets/images/20220422133654_061702_30028589.jpg",
+  pic: "https://www.muji.com/public/media/jp/img/store/061702/visual/1.jpg",
 };
 
 const startVideo = async () => {
