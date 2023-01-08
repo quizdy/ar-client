@@ -1,13 +1,18 @@
 <template>
   <v-container>
-    <v-text-field solo readonly>無印良品</v-text-field>
-    <img
-      src="https://www.muji.com/public/media/jp/img/store/061702/visual/1.jpg"
-    />
+    <v-text-field solo readonly>{{ props.title }}</v-text-field>
+    <img :src="props.pic" />
   </v-container>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const props = defineProps<{
+  title: string;
+  lat: number;
+  lng: number;
+  pic: string;
+}>();
+</script>
 
 <style scoped lang="scss">
 img {

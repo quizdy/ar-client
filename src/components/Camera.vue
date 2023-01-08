@@ -1,15 +1,15 @@
 <template>
   <v-container>
-    <video autoplay muted playsinline></video>
-    <canvas></canvas>
+    <v-btn @click="startVideo">startVideo</v-btn>
+
+    <video id="videoCapture" autoplay muted playsinline></video>
+    <canvas id="canvasCapture"></canvas>
     <v-text-field solo readonly label="rotateDegrees">{{
       pos.rotateDegrees
     }}</v-text-field>
     <v-text-field solo readonly label="misMatchPercentage">{{
       pos.misMatchPercentage
     }}</v-text-field>
-    <v-btn v-if="!pos.state" @click="startVideo">startVideo</v-btn>
-    <v-btn v-else @click="stopVideo">stopVideo</v-btn>
     <v-btn @click="checkImage">check</v-btn>
   </v-container>
 </template>
@@ -21,8 +21,27 @@ interface DeviceOrientationEventiOS extends DeviceOrientationEvent {
   requestPermission?: () => Promise<"granted" | "denied">;
 }
 
+const props = defineProps<{
+  title: string;
+  lat: number;
+  lng: number;
+  pic: string;
+}>();
+
+const startVideoMethod = (): void => {
+  startVideo();
+};
+
+const stopVideoMethod = (): void => {
+  stopVideo();
+};
+
+defineExpose({
+  startVideoMethod,
+  stopVideoMethod,
+});
+
 const pos = reactive({
-  state: false,
   frameId: 0,
   frontToBack: 0.0,
   leftToRight: 0.0,
@@ -33,36 +52,49 @@ const pos = reactive({
   misMatchPercentage: 0.0,
 });
 
-const target = {
-  name: "test",
-  img: "/_nuxt/assets/images/question.png",
-  pic: "https://www.muji.com/public/media/jp/img/store/061702/visual/1.jpg",
-};
-
-const startVideo = async () => {
+const startVideo = async (): Promise<void> => {
   if (typeof window !== "object") return;
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
-  const video = document.getElementsByTagName("video")[0];
-  const canvas = document.getElementsByTagName("canvas")[0];
+
+  const video = document.getElementById("videoCapture") as HTMLVideoElement;
+  const canvas = document.getElementById("canvasCapture") as HTMLCanvasElement;
+
+  if (video === null) return;
+  if (canvas === null) return;
+
   const ctx = canvas.getContext("2d");
-  const stream = await navigator.mediaDevices.getUserMedia({
+
+  const devices = (await navigator.mediaDevices.enumerateDevices()).filter(
+    (d) => d.kind.includes("video")
+  );
+
+  console.log(devices);
+
+  let constraints = {
     audio: false,
-    // video: { facingMode: { exact: "environment" } },
     video: true,
-  });
+  };
+
+  const requestPermission = (
+    DeviceOrientationEvent as unknown as DeviceOrientationEventiOS
+  ).requestPermission;
+
+  if (typeof requestPermission === "function") {
+    (constraints.video as any) = { facingMode: { exact: "environment" } };
+  }
+
+  const stream = await navigator.mediaDevices.getUserMedia(constraints);
+
   video.srcObject = stream;
   video.play();
   if (ctx !== null) {
     const question = new Image();
-    question.src = target.img;
+    question.src = "/images/box.png";
     question.onload = () => {
       updateCanvas(ctx, video, canvas, question);
     };
   }
 
-  const requestPermission = (
-    DeviceOrientationEvent as unknown as DeviceOrientationEventiOS
-  ).requestPermission;
   if (typeof requestPermission === "function") {
     const res = await requestPermission();
     if (res === "granted") {
@@ -77,8 +109,6 @@ const startVideo = async () => {
     window.addEventListener("deviceorientation", handleOrientationEvent, true);
     window.addEventListener("devicemotion", handleMotionEvent, true);
   }
-
-  pos.state = true;
 };
 
 const stopVideo = () => {
@@ -88,7 +118,6 @@ const stopVideo = () => {
   cancelAnimationFrame(pos.frameId);
   window.removeEventListener("deviceorientation", handleOrientationEvent, true);
   window.removeEventListener("devicemotion", handleMotionEvent, true);
-  pos.state = false;
 };
 
 const updateCanvas = (
@@ -105,8 +134,11 @@ const updateCanvas = (
 };
 
 const checkImage = () => {
-  const canvas = document.getElementsByTagName("canvas")[0];
-  const diff = resemble(target.pic)
+  const canvas = document.getElementById("canvasCapture") as HTMLCanvasElement;
+
+  if (canvas === null) return;
+
+  const diff = resemble(props.pic)
     .compareTo(canvas.toDataURL())
     .ignoreColors()
     .onComplete((data) => {

@@ -36,14 +36,15 @@ onMounted(() => {
 });
 
 const onFileChanged = (e: Event) => {
-  const target = e.target as HTMLInputElement;
-  const files = target.files;
+  const files = (e.target as HTMLInputElement).files;
   const file = files![0];
   gps.file = file;
 };
 
+const emits = defineEmits<{ (e: "update", value?: any): void }>();
+
 const upload = () => {
-  console.log(gps.file);
+  emits("update", gps);
 };
 </script>
 
