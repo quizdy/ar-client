@@ -113,7 +113,7 @@ const showMap = async () => {
 
   map.panTo(currentPos);
 
-  console.log(pos.lat, pos.lng);
+  console.log(props.title, pos.lat, pos.lng);
 };
 
 const chkDistance = (

@@ -19,6 +19,8 @@ interface DeviceOrientationEventiOS extends DeviceOrientationEvent {
   requestPermission?: () => Promise<"granted" | "denied">;
 }
 
+const GAP = 70;
+
 const props = defineProps<{
   title: string;
   lat: number;
@@ -145,7 +147,7 @@ const checkImage = () => {
       console.log(data);
       pos.misMatchPercentage = data.misMatchPercentage;
 
-      if (pos.misMatchPercentage < 40) {
+      if (pos.misMatchPercentage < GAP) {
         emits("nextTreasure");
       }
     });
