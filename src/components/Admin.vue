@@ -1,11 +1,7 @@
 <template>
   <v-container>
-    <v-text-field label="name">{{ gps.name }}</v-text-field>
+    <v-text-field label="name" v-model="gps.name"></v-text-field>
     <v-file-input
-      :rules="[
-        (value) =>
-          !value || value.size >= 10000000 || 'Size should be less than 10 MB!',
-      ]"
       accept="image/png, image/jpeg, image/bmp"
       placeholder="Pick a picture"
       prepend-icon="mdi-camera"
@@ -44,6 +40,8 @@ const onFileChanged = (e: Event) => {
 const emits = defineEmits<{ (e: "update", value?: any): void }>();
 
 const upload = () => {
+  if (!gps.name) return;
+  if (!gps.file) return;
   emits("update", gps);
 };
 </script>

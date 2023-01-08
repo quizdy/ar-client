@@ -26,17 +26,11 @@ let loader: any;
 let pos = reactive({
   lat: 0.0,
   lng: 0.0,
+  accuracy: 0,
+  zoom: 20,
 });
 
 const distance = ref();
-
-const showMapMethod = (): void => {
-  showMap();
-};
-
-defineExpose({
-  showMapMethod,
-});
 
 onMounted(() => {
   loader = new Loader({
@@ -46,10 +40,6 @@ onMounted(() => {
     libraries: ["places"],
   });
 
-  showMap();
-});
-
-const showMap = () => {
   if (navigator.geolocation && navigator.geolocation.watchPosition) {
     navigator.geolocation.watchPosition(watchPosition, watchPositionError, {
       enableHighAccuracy: false,
@@ -57,7 +47,7 @@ const showMap = () => {
       maximumAge: 0,
     });
   }
-};
+});
 
 const watchPositionError = (e: any) => {
   console.log("watchPositionError", e);
@@ -66,54 +56,64 @@ const watchPositionError = (e: any) => {
 const watchPosition = (position: any) => {
   pos.lat = position.coords.latitude;
   pos.lng = position.coords.longitude;
+  pos.accuracy = position.coords.accuracy;
 
+  showMap();
+
+  chkDistance(props.lat, props.lng, pos.lat, pos.lng);
+};
+
+const showMap = async () => {
   const mapOptions = reactive({
     center: {
       lat: pos.lat,
       lng: pos.lng,
     },
-    zoom: 20,
+    zoom: pos.zoom,
     disableDefaultUI: true,
     zoomControl: true,
   });
 
-  chkDistance(props.lat, props.lng, pos.lat, pos.lng);
+  const google = await loader.load();
+  const map = new google.maps.Map((gmap as any).value, mapOptions);
 
-  loader.load().then((google: any) => {
-    const map = new google.maps.Map((gmap as any).value, mapOptions);
-    const currentPos = new google.maps.LatLng(pos.lat, pos.lng);
-    const currentMarker = new google.maps.Marker({ position: currentPos });
-    currentMarker.setMap(map);
-
-    const icon = {
-      url: "/images/box.png",
-      scaledSize: new google.maps.Size(40, 30),
-      origin: new google.maps.Point(0, 0),
-      anchor: new google.maps.Point(0, 0),
-    };
-
-    const targetPos = new google.maps.LatLng(props.lat, props.lng);
-    const targetMarker = new google.maps.Marker({
-      position: targetPos,
-      icon: icon,
-    });
-    targetMarker.setMap(map);
-
-    new google.maps.Circle({
-      map: map,
-      center: currentPos,
-      radius: position.coords.accuracy,
-      strokeColor: "#0081C9",
-      strokeOpacity: 0.5,
-      strokeWeight: 0.75,
-      fillColor: "#0081C9",
-      fillOpacity: 0.18,
-    });
-
-    map.panTo(currentPos);
-
-    console.log(mapOptions.center.lat, mapOptions.center.lng);
+  google.maps.event.addListener(map, "zoom_changed", function () {
+    console.log(map.getZoom());
+    pos.zoom = map.getZoom();
   });
+
+  const currentPos = new google.maps.LatLng(pos.lat, pos.lng);
+  const currentMarker = new google.maps.Marker({ position: currentPos });
+  currentMarker.setMap(map);
+
+  const icon = {
+    url: "/images/box.png",
+    scaledSize: new google.maps.Size(40, 30),
+    origin: new google.maps.Point(0, 0),
+    anchor: new google.maps.Point(0, 0),
+  };
+
+  const targetPos = new google.maps.LatLng(props.lat, props.lng);
+  const targetMarker = new google.maps.Marker({
+    position: targetPos,
+    icon: icon,
+  });
+  targetMarker.setMap(map);
+
+  new google.maps.Circle({
+    map: map,
+    center: currentPos,
+    radius: pos.accuracy,
+    strokeColor: "#0081C9",
+    strokeOpacity: 0.5,
+    strokeWeight: 0.75,
+    fillColor: "#0081C9",
+    fillOpacity: 0.18,
+  });
+
+  map.panTo(currentPos);
+
+  console.log(pos.lat, pos.lng);
 };
 
 const chkDistance = (

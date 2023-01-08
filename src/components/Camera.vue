@@ -1,7 +1,5 @@
 <template>
   <v-container>
-    <v-btn @click="startVideo">startVideo</v-btn>
-
     <video id="videoCapture" autoplay muted playsinline></video>
     <canvas id="canvasCapture"></canvas>
     <v-text-field solo readonly label="rotateDegrees">{{
@@ -133,6 +131,8 @@ const updateCanvas = (
   );
 };
 
+const emits = defineEmits<{ (e: "nextTreasure"): void }>();
+
 const checkImage = () => {
   const canvas = document.getElementById("canvasCapture") as HTMLCanvasElement;
 
@@ -144,6 +144,10 @@ const checkImage = () => {
     .onComplete((data) => {
       console.log(data);
       pos.misMatchPercentage = data.misMatchPercentage;
+
+      if (pos.misMatchPercentage < 40) {
+        emits("nextTreasure");
+      }
     });
 };
 

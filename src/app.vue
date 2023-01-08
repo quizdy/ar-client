@@ -16,44 +16,37 @@
       <Map
         v-show="currentComponent === 'map'"
         ref="mapRef"
-        :title="targets[0].title"
-        :lat="targets[0].lat"
-        :lng="targets[0].lng"
-        :pic="targets[0].pic"
+        :title="targets[no].title"
+        :lat="targets[no].lat"
+        :lng="targets[no].lng"
+        :pic="targets[no].pic"
       />
       <Camera
         v-show="currentComponent === 'camera'"
+        @nextTreasure="nextTreasure"
         ref="cameraRef"
-        :title="targets[0].title"
-        :lat="targets[0].lat"
-        :lng="targets[0].lng"
-        :pic="targets[0].pic"
+        :title="targets[no].title"
+        :lat="targets[no].lat"
+        :lng="targets[no].lng"
+        :pic="targets[no].pic"
       />
       <Admin v-show="currentComponent === 'admin'" @update="update" />
       <Hint
         v-show="currentComponent === ''"
-        :title="targets[0].title"
-        :lat="targets[0].lat"
-        :lng="targets[0].lng"
-        :pic="targets[0].pic"
+        :title="targets[no].title"
+        :lat="targets[no].lat"
+        :lng="targets[no].lng"
+        :pic="targets[no].pic"
       />
     </v-main>
   </v-app>
 </template>
 
 <script setup lang="ts">
-const targets = [
-  {
-    title: "オンデイズ",
-    lat: 35.16105678202227,
-    lng: 136.98562526441762,
-    pic: "/images/20220422133654_061702_30028589.jpg",
-    distance: 0.0,
-  },
-];
-
 const cameraRef = ref();
 const mapRef = ref();
+let targets: any = ref([]);
+let no = 0;
 
 let currentComponent = ref("");
 
@@ -66,10 +59,28 @@ const chgPage = (pageName: string) => {
   }
 };
 
-// Test
-const update = (value?: string) => {
-  console.log(value);
+const update = (value?: any) => {
+  console.log("upload", value.file);
 };
+
+const nextTreasure = () => {
+  if (no < targets.length) {
+    no++;
+    alert("Go to next point");
+    chgPage("");
+  } else {
+    alert("clear!!!");
+  }
+
+  console.info("no", no);
+};
+
+const code = ref("1");
+const { data: res } = await useFetch("/api/targets", {
+  query: { no },
+});
+
+targets = res.value?.targets.targets;
 </script>
 
 <style scoped lang="scss"></style>
