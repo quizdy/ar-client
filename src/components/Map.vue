@@ -2,43 +2,57 @@
 import { Loader } from "@googlemaps/js-api-loader";
 
 const target = {
-  lat: 35.189346130029506, 
-  lng: 136.98874682457898,
-  title: "home",
-}
+  lat: 35.16105678202227,
+  lng: 136.98562526441762,
+  title: "オンデイズ",
+};
 
 const gmap = ref<HTMLElement>();
-
 const $config = useRuntimeConfig();
 
+let loader: any;
+let pos = reactive({
+  lat: 0.0,
+  lng: 0.0,
+});
+
 onMounted(() => {
-  const loader = new Loader({
+  loader = new Loader({
     //apiKey: $config.gmapApiKey,
     apiKey: "AIzaSyCYsLDv3eHNGZ-HFcXUjoA5r442Aj10ND0",
     version: "weekly",
     libraries: ["places"],
   });
 
+  showMap();
+});
+
+const showMap = () => {
   if (navigator.geolocation && navigator.geolocation.watchPosition) {
     navigator.geolocation.watchPosition((position) => {
-      const mapOptions = {
-        center: {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        },
-        zoom: 20,
-        disableDefaultUI: true,
-      };
+      pos.lat = position.coords.latitude;
+      pos.lng = position.coords.longitude;
 
       loader
         .load()
-        .then((google) => {
+        .then((google: any) => {
+          const mapOptions = reactive({
+            center: {
+              lat: pos.lat,
+              lng: pos.lng,
+            },
+            zoom: 20,
+            disableDefaultUI: true,
+            zoomControl: true,
+          });
+
+          console.log(mapOptions.center.lat, mapOptions.center.lng);
           const map = new google.maps.Map((gmap as any).value, mapOptions);
 
           const markerOptions = {
             position: {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
+              lat: pos.lat,
+              lng: pos.lng,
             },
             map,
             title: "now",
@@ -53,26 +67,26 @@ onMounted(() => {
             },
             map,
             title: target.title,
+            icon: {
+              url: "/_nuxt/assets/images/pin.png",
+            },
           };
 
           new google.maps.Marker(markerOptions2);
         })
-        .catch((e) => {
+        .catch((e: Error) => {
           console.log(e);
         });
     });
   }
-});
+};
 </script>
 
 <template>
   <div class="container">
     <div class="map" ref="gmap"></div>
-    <div class="footer">
-      <button>hint</button>
-      <button>camera</button>
-    </div>
-</div>
+    <button @click="showMap">show</button>
+  </div>
 </template>
 
 <style scoped>
@@ -89,12 +103,9 @@ onMounted(() => {
 }
 
 .map {
-  height: 90vh;
+  margin: 0;
+  padding: 0;
+  height: 80vh;
   width: 100%;
-}
-
-button {
-  margin: .5rem;
-  border-radius: 1rem;
 }
 </style>

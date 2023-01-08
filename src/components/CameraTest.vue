@@ -1,4 +1,15 @@
+<template>
+  <button v-if="!pos.state" @click="startVideo">startVideo</button>
+  <button v-else @click="stopVideo">stopVideo</button>
+  <video autoplay muted playsinline></video>
+  <canvas></canvas>
+  <div>{{ pos.rotateDegrees }}</div>
+  <div>{{ pos.misMatchPercentage }}</div>
+</template>
+
 <script setup lang="ts">
+import resemble from "resemblejs";
+
 interface DeviceOrientationEventiOS extends DeviceOrientationEvent {
   requestPermission?: () => Promise<"granted" | "denied">;
 }
@@ -12,11 +23,13 @@ const pos = reactive({
   gravityX: 0.0,
   gravityY: 0.0,
   gravityZ: 0.0,
+  misMatchPercentage: 0.0,
 });
 
 const target = {
   name: "test",
   img: "/_nuxt/assets/images/question.png",
+  pic: "/_nuxt/assets/images/a.png",
 };
 
 const startVideo = async () => {
@@ -28,6 +41,7 @@ const startVideo = async () => {
   const stream = await navigator.mediaDevices.getUserMedia({
     audio: false,
     video: { facingMode: { exact: "environment" } },
+    // video: true,
   });
   video.srcObject = stream;
   video.play();
@@ -81,6 +95,13 @@ const updateCanvas = (
   pos.frameId = requestAnimationFrame(
     updateCanvas.bind(null, ctx, video, canvas, question)
   );
+
+  const diff = resemble(target.pic)
+    .compareTo(canvas.toDataURL())
+    .ignoreColors()
+    .onComplete((data) => {
+      pos.misMatchPercentage = data.misMatchPercentage;
+    });
 };
 
 const handleOrientationEvent = (ev: DeviceOrientationEvent) => {
@@ -106,14 +127,6 @@ const handleMotionEvent = (ev: DeviceMotionEvent) => {
   }
 };
 </script>
-
-<template>
-  <button v-if="!pos.state" @click="startVideo">startVideo</button>
-  <button v-else @click="stopVideo">stopVideo</button>
-  <video autoplay muted playsinline></video>
-  <canvas></canvas>
-  <div>{{ pos.rotateDegrees }}</div>
-</template>
 
 <style scoped>
 video {
