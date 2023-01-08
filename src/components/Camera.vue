@@ -1,10 +1,17 @@
 <template>
-  <button v-if="!pos.state" @click="startVideo">startVideo</button>
-  <button v-else @click="stopVideo">stopVideo</button>
-  <video autoplay muted playsinline></video>
-  <canvas></canvas>
-  <div>{{ pos.rotateDegrees }}</div>
-  <div>{{ pos.misMatchPercentage }}</div>
+  <v-container>
+    <video autoplay muted playsinline></video>
+    <canvas></canvas>
+    <v-text-field solo readonly label="rotateDegrees">{{
+      pos.rotateDegrees
+    }}</v-text-field>
+    <v-text-field solo readonly label="misMatchPercentage">{{
+      pos.misMatchPercentage
+    }}</v-text-field>
+    <v-btn v-if="!pos.state" @click="startVideo">startVideo</v-btn>
+    <v-btn v-else @click="stopVideo">stopVideo</v-btn>
+    <v-btn @click="checkImage">check</v-btn>
+  </v-container>
 </template>
 
 <script setup lang="ts">
@@ -29,7 +36,7 @@ const pos = reactive({
 const target = {
   name: "test",
   img: "/_nuxt/assets/images/question.png",
-  pic: "/_nuxt/assets/images/a.png",
+  pic: "/_nuxt/assets/images/20220422133654_061702_30028589.jpg",
 };
 
 const startVideo = async () => {
@@ -40,8 +47,8 @@ const startVideo = async () => {
   const ctx = canvas.getContext("2d");
   const stream = await navigator.mediaDevices.getUserMedia({
     audio: false,
-    video: { facingMode: { exact: "environment" } },
-    // video: true,
+    // video: { facingMode: { exact: "environment" } },
+    video: true,
   });
   video.srcObject = stream;
   video.play();
@@ -95,11 +102,15 @@ const updateCanvas = (
   pos.frameId = requestAnimationFrame(
     updateCanvas.bind(null, ctx, video, canvas, question)
   );
+};
 
+const checkImage = () => {
+  const canvas = document.getElementsByTagName("canvas")[0];
   const diff = resemble(target.pic)
     .compareTo(canvas.toDataURL())
     .ignoreColors()
     .onComplete((data) => {
+      console.log(data);
       pos.misMatchPercentage = data.misMatchPercentage;
     });
 };

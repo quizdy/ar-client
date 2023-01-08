@@ -1,58 +1,41 @@
 <template>
-  <div class="main">
-    <CameraTest v-if="screen === 'camera'" />
-    <Map v-else-if="screen === 'map'" />
-    <Hint v-else />
-  </div>
-  <div class="footer">
-    <button :class="{ active: screen === '' }" @click="showScreen('')">
-      hint
-    </button>
-    <button :class="{ active: screen === 'map' }" @click="showScreen('map')">
-      map
-    </button>
-    <button
-      :class="{ active: screen === 'camera' }"
-      @click="showScreen('camera')"
-    >
-      camera
-    </button>
-  </div>
+  <v-app>
+    <v-app-bar app>
+      <v-app-bar-title>たからさがしα</v-app-bar-title>
+      <v-spacer></v-spacer>
+      <div>
+        <v-tabs background-color="transparent">
+          <v-tab @click="chgPage('')">ヒント</v-tab>
+          <v-tab @click="chgPage('map')">ちず</v-tab>
+          <v-tab @click="chgPage('camera')">カメラ</v-tab>
+          <v-tab @click="chgPage('admin')">アップロード</v-tab>
+        </v-tabs>
+      </div>
+    </v-app-bar>
+    <v-main>
+      <v-container>
+        <Map v-show="currentComponent === 'map'" />
+        <Camera v-show="currentComponent === 'camera'" ref="camera" />
+        <Admin v-show="currentComponent === 'admin'" />
+        <Hint v-show="currentComponent === ''" />
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
 <script setup lang="ts">
-let screen = ref("");
+const hint = resolveComponent("Hint");
+const map = resolveComponent("Map");
+const camera = resolveComponent("Camera");
 
-const showScreen = (screenName: string) => {
-  screen.value = screenName;
+let currentComponent = ref("");
+
+const chgPage = (pageName: string) => {
+  currentComponent.value = pageName;
+  if (pageName === "camera") {
+  } else {
+  }
 };
 </script>
 
-<style scoped>
-.main {
-  height: 100%;
-  width: 100%;
-}
-
-.footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 80px;
-  width: 100%;
-}
-
-.footer button {
-  border-radius: 1rem;
-  border: 1px solid #eee;
-  box-shadow: 0px 0px 3px #ccc;
-  margin: 0.5rem;
-  padding: 0.5rem;
-  cursor: pointer;
-}
-
-.footer button.active {
-  color: #fff;
-  background-color: #f3bc56e7;
-}
-</style>
+<style scoped lang="scss"></style>

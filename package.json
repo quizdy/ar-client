@@ -17,8 +17,11 @@
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.15.1",
+    "@mdi/font": "^7.1.96",
     "fs": "^0.0.1-security",
     "path": "^0.12.7",
-    "resemblejs": "^4.1.0"
+    "resemblejs": "^4.1.0",
+    "sass": "^1.57.1",
+    "vuetify": "^3.1.0"
   }
 }

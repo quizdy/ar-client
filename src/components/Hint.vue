@@ -1,21 +1,15 @@
 <template>
-  <div class="container">
-    <img src="/_nuxt/assets/images/a.png" />
-  </div>
+  <v-container>
+    <v-text-field solo readonly>無印良品</v-text-field>
+    <img src="/_nuxt/assets/images/20220422133654_061702_30028589.jpg" />
+  </v-container>
 </template>
 
 <script setup lang="ts"></script>
 
-<style scoped>
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: #ccc;
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
+<style scoped lang="scss">
+img {
+  height: auto;
+  width: 80vw;
 }
 </style>

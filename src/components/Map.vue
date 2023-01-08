@@ -85,7 +85,7 @@ const showMap = () => {
 <template>
   <div class="container">
     <div class="map" ref="gmap"></div>
-    <button @click="showMap">show</button>
+    <v-btn @click="showMap">reload</v-btn>
   </div>
 </template>
 
