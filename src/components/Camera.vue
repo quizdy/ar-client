@@ -8,7 +8,10 @@
     <v-text-field solo readonly label="misMatchPercentage">{{
       pos.misMatchPercentage
     }}</v-text-field>
-    <v-btn @click="checkImage">check</v-btn>
+    <v-row>
+      <v-col cols="6"><v-btn @click="checkImage">check</v-btn></v-col>
+      <v-text-field full-width v-model="gap"></v-text-field>
+    </v-row>
   </v-container>
 </template>
 
@@ -19,14 +22,14 @@ interface DeviceOrientationEventiOS extends DeviceOrientationEvent {
   requestPermission?: () => Promise<"granted" | "denied">;
 }
 
-const GAP = 70;
-
 const props = defineProps<{
   title: string;
   lat: number;
   lng: number;
   pic: string;
 }>();
+
+const gap = ref(50);
 
 const startVideoMethod = (): void => {
   startVideo();
@@ -146,8 +149,7 @@ const checkImage = () => {
     .onComplete((data) => {
       console.log(data);
       pos.misMatchPercentage = data.misMatchPercentage;
-
-      if (pos.misMatchPercentage < GAP) {
+      if (pos.misMatchPercentage < gap.value) {
         emits("nextTreasure");
       }
     });

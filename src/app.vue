@@ -29,8 +29,13 @@
         :lat="targets[no].lat"
         :lng="targets[no].lng"
         :pic="targets[no].pic"
+        :gap="gap"
       />
-      <Admin v-show="currentComponent === 'admin'" @update="update" />
+      <Admin
+        v-show="currentComponent === 'admin'"
+        :gap="gap"
+        @update="update"
+      />
       <Hint
         v-show="currentComponent === ''"
         :title="targets[no].title"
@@ -49,6 +54,7 @@ let targets: any = ref([]);
 let no = 0;
 
 let currentComponent = ref("");
+const gap = ref(0);
 
 const chgPage = (pageName: string) => {
   currentComponent.value = pageName;
@@ -60,7 +66,16 @@ const chgPage = (pageName: string) => {
 };
 
 const update = (value?: any) => {
-  console.log("upload", value.file);
+  const reader = new FileReader();
+  reader.readAsDataURL(value.file);
+
+  reader.onload = async (e: any) => {
+    value.base64 = e.currentTarget.result;
+    const { data: res } = await useFetch("/api/targets", {
+      method: "POST",
+      body: { value: value },
+    });
+  };
 };
 
 const nextTreasure = () => {
@@ -77,7 +92,8 @@ const nextTreasure = () => {
 
 const code = ref("1");
 const { data: res } = await useFetch("/api/targets", {
-  query: { no },
+  method: "GET",
+  params: { no: 1 },
 });
 
 targets = res.value?.targets.targets;

@@ -1,0 +1,66 @@
+import fs from "fs";
+import path from "path"
+
+const ROOT = 'C:/Users/aki/Desktop/proj/quizdy/ar-client/src/'
+
+export default defineEventHandler(async(e) => {
+
+  const body = await readBody(e)
+  decodeBase64(body.value.name, body.value.base64)
+  const targets: any = await import('~/assets/targets.json')
+  return {
+    targets
+  }
+})
+
+const decodeBase64 = (fileName: string, base64: string) => {
+  if (base64.startsWith('data:image')) {
+    const data = base64.replace(/^data:\w+\/\w+;base64,/, '')
+    const decoded = Buffer.from(data, 'base64')
+    const ext = base64.toString().slice(base64.indexOf('/') + 1, base64.indexOf(';'))
+    try {
+      const p = path.resolve(ROOT + 'public/images', fileName + '.' + ext)
+      console.log('aaaaa', p)
+      fs.writeFileSync(p, decoded, 'base64')
+    } catch (e: any) {
+      console.log(e)
+    }
+    fileName = '/images/' + fileName + '.' + ext
+  }
+}
+
+  /**
+   * setUser
+   */
+  // public setUser(user: Model.IUser): string {
+  //   const users = this.getUsers()
+
+  //   if (users.length === 0 || !users.some((source) => source.userId === user.userId)) {
+  //     user.userId = this.getNewUserId()
+  //     user.children.forEach((child, i) => {
+  //       child.userId = user.userId
+  //       child.childId = 'c' + ('000' + i).slice(-3)
+  //     })
+  //   } else {
+  //     users.forEach((source) => {
+  //       if (source.userId !== user.userId) return true
+  //       Object.assign(source, JSON.parse(JSON.stringify(user)))
+  //     })
+  //   }
+
+  //   user.updateYmd = new Date()
+  //   user.children.forEach((child) => (child.updateYmd = new Date()))
+
+  //   try {
+  //     const json = path.resolve(root, TARGET, this.dirName, user.userId + '.json')
+  //     fs.writeFileSync(json, JSON.stringify(user, null, 2))
+  //   } catch (e) {
+  //     throw new Error(e)
+  //   }
+
+  //   user.children.forEach((child) => {
+  //     this.updateChild(child)
+  //   })
+
+  //   return user.userId
+  // }

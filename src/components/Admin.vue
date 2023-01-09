@@ -37,7 +37,7 @@ const onFileChanged = (e: Event) => {
   gps.file = file;
 };
 
-const emits = defineEmits<{ (e: "update", value?: any): void }>();
+const emits = defineEmits<{ (e: "update", gps: any): void }>();
 
 const upload = () => {
   if (!gps.name) return;
