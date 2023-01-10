@@ -6,97 +6,127 @@
       <div>
         <v-tabs background-color="transparent">
           <v-tab @click="chgPage('')">ヒント</v-tab>
-          <v-tab @click="chgPage('map')">ちず</v-tab>
-          <v-tab @click="chgPage('camera')">カメラ</v-tab>
-          <v-tab @click="chgPage('admin')">アップロード</v-tab>
+          <v-tab @click="chgPage('targetMap')">ちず</v-tab>
+          <v-tab @click="chgPage('targetScan')">カメラ</v-tab>
+          <v-tab @click="chgPage('targetRegist')">とうろく</v-tab>
         </v-tabs>
       </div>
     </v-app-bar>
     <v-main>
-      <Map
-        v-show="currentComponent === 'map'"
-        ref="mapRef"
-        :title="targets[no].title"
-        :lat="targets[no].lat"
-        :lng="targets[no].lng"
-        :pic="targets[no].pic"
+      <TargetMap
+        v-show="currentComponent === 'targetMap'"
+        ref="refTargetMap"
+        :venue="target.venue"
+        :title="target.title"
+        :lat="target.lat"
+        :lng="target.lng"
+        :pic="target.pic"
+        :comments="target.comments"
       />
-      <Camera
-        v-show="currentComponent === 'camera'"
+      <TargetScan
+        v-show="currentComponent === 'targetScan'"
         @nextTreasure="nextTreasure"
-        ref="cameraRef"
-        :title="targets[no].title"
-        :lat="targets[no].lat"
-        :lng="targets[no].lng"
-        :pic="targets[no].pic"
-        :gap="gap"
+        ref="refTargetScan"
+        :venue="target.venue"
+        :title="target.title"
+        :lat="target.lat"
+        :lng="target.lng"
+        :pic="target.pic"
+        :comments="target.comments"
       />
-      <Admin
-        v-show="currentComponent === 'admin'"
-        :gap="gap"
-        @update="update"
+      <TargetRegist
+        v-show="currentComponent === 'targetRegist'"
+        @update="updateTarget"
+        ref="refTargetRegist"
+        :venue="target.venue"
+        :title="target.title"
+        :lat="target.lat"
+        :lng="target.lng"
+        :pic="target.pic"
+        :comments="target.comments"
       />
-      <Hint
+      <TargetInfo
         v-show="currentComponent === ''"
-        :title="targets[no].title"
-        :lat="targets[no].lat"
-        :lng="targets[no].lng"
-        :pic="targets[no].pic"
+        :venue="target.venue"
+        :title="target.title"
+        :lat="target.lat"
+        :lng="target.lng"
+        :pic="target.pic"
+        :comments="target.comments"
       />
     </v-main>
   </v-app>
 </template>
 
 <script setup lang="ts">
-const cameraRef = ref();
-const mapRef = ref();
-let targets: any = ref([]);
-let no = 0;
+const venue = "test";
+const targets: any = ref([]);
+const currentComponent = ref("");
 
-let currentComponent = ref("");
-const gap = ref(0);
+const refTargetMap = ref();
+const refTargetScan = ref();
+const refTargetRegist = ref();
+
+let no = 0;
+const target = reactive({
+  venue: "",
+  title: "",
+  lat: 0.0,
+  lng: 0.0,
+  pic: "",
+  comments: "",
+});
 
 const chgPage = (pageName: string) => {
   currentComponent.value = pageName;
-  if (pageName === "camera") {
-    cameraRef.value.startVideoMethod();
+  if (pageName === "targetScan") {
+    refTargetScan.value.startVideoMethod();
   } else {
-    cameraRef.value.stopVideoMethod();
+    refTargetScan.value.stopVideoMethod();
   }
 };
 
-const update = (value?: any) => {
+const updateTarget = (updateTarget?: any) => {
   const reader = new FileReader();
-  reader.readAsDataURL(value.file);
+  reader.readAsDataURL(updateTarget.file);
 
   reader.onload = async (e: any) => {
-    value.base64 = e.currentTarget.result;
-    const { data: res } = await useFetch("/api/targets", {
+    updateTarget.base64 = e.currentTarget.result;
+    console.log(updateTarget);
+    const { data: res } = await useFetch("/api/target", {
       method: "POST",
-      body: { value: value },
+      body: { target: updateTarget },
     });
   };
 };
 
+const readTarget = async (value?: any) => {
+  const { data: res } = await useFetch("/api/targets", {
+    method: "GET",
+    params: { venue: venue },
+  });
+
+  targets.value = res.value?.targets.targets;
+
+  target.venue = targets.value[no].venue;
+  target.title = targets.value[no].title;
+  target.lat = targets.value[no].lat;
+  target.lng = targets.value[no].lng;
+  target.pic = targets.value[no].pic;
+  target.comments = targets.value[no].comments;
+};
+
 const nextTreasure = () => {
-  if (no < targets.length) {
+  if (no < targets.value.length) {
     no++;
     alert("Go to next point");
     chgPage("");
   } else {
     alert("clear!!!");
   }
-
-  console.info("no", no);
 };
 
-const code = ref("1");
-const { data: res } = await useFetch("/api/targets", {
-  method: "GET",
-  params: { no: 1 },
-});
-
-targets = res.value?.targets.targets;
+readTarget();
 </script>
 
 <style scoped lang="scss"></style>

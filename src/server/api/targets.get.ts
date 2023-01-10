@@ -1,9 +1,16 @@
-export default defineEventHandler(async(e) => {
+import fs from "fs";
+import path from "path"
+import { createCommonJS } from 'mlly'
+
+const { __dirname } = createCommonJS(import.meta.url)
+const ASSETS_PATH = "../../src/assets"
+
+export default defineEventHandler((e) => {
 
   const query = getQuery(e)
-  console.log(query)
+  const json = path.join(__dirname, ASSETS_PATH, query.venue + ".json")
+  const targets: any = JSON.parse(fs.readFileSync(json, 'utf-8'));
 
-  const targets: any = await import('~/assets/targets.json')
   return {
     targets
   }

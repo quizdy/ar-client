@@ -1,16 +1,22 @@
 import fs from "fs";
 import path from "path"
+import { createCommonJS } from 'mlly'
 
-const ROOT = 'C:/Users/aki/Desktop/proj/quizdy/ar-client/src/'
+const { __dirname } = createCommonJS(import.meta.url)
+
+const ASSETS_PATH = "../../src/assets"
+const IMAGES_PATH = "../../src/public/images"
 
 export default defineEventHandler(async(e) => {
+  console.log('aaaa')
+  // const body = await readBody(e)
+  // console.log(body)
+  // decodeBase64(body.value.name, body.value.base64)
 
-  const body = await readBody(e)
-  decodeBase64(body.value.name, body.value.base64)
-  const targets: any = await import('~/assets/targets.json')
-  return {
-    targets
-  }
+  // updateJson(body.value)
+  // return {
+  //   result: true
+  // }
 })
 
 const decodeBase64 = (fileName: string, base64: string) => {
@@ -19,8 +25,7 @@ const decodeBase64 = (fileName: string, base64: string) => {
     const decoded = Buffer.from(data, 'base64')
     const ext = base64.toString().slice(base64.indexOf('/') + 1, base64.indexOf(';'))
     try {
-      const p = path.resolve(ROOT + 'public/images', fileName + '.' + ext)
-      console.log('aaaaa', p)
+      const p = path.join(__dirname, IMAGES_PATH, fileName + '.' + ext)
       fs.writeFileSync(p, decoded, 'base64')
     } catch (e: any) {
       console.log(e)
@@ -29,6 +34,36 @@ const decodeBase64 = (fileName: string, base64: string) => {
   }
 }
 
+const updateJson = (updateTarget: any) => {
+  const json = path.join(__dirname, ASSETS_PATH, updateTarget.venue + ".json")
+
+  if (!fs.existsSync(json)) {
+    
+  }
+  
+    const targets: any = JSON.parse(fs.readFileSync(json, 'utf-8'));
+    updateTarget.no = targets.targets.length + 1
+    targets.targets.push(updateTarget)
+
+  console.log(targets)
+  try {
+    fs.writeFileSync(json, JSON.stringify(updateTarget, null, 2))
+  } catch (e) {
+    throw new Error(e)
+  }
+}
+
+const getNewNo = () => {
+  // const dir = path.resolve(root, TARGET, this.dirName)
+  // const files = fs.readdirSync(dir)
+  // if (files.length === 0) return 'u001'
+  // const list = [].slice.call(files)
+  // list.sort()
+  // const last: string = list.slice(-1)[0]
+  // const num = Number(last.replace(/\.[^/.]+$/, '').slice(1)) + 1
+  // const userId = 'u' + String(('000' + num).slice(-3))
+  // return userId
+}
   /**
    * setUser
    */

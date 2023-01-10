@@ -1,17 +1,19 @@
 <template>
   <v-container>
-    <video id="videoCapture" autoplay muted playsinline></video>
-    <canvas id="canvasCapture"></canvas>
-    <v-text-field solo readonly label="rotateDegrees">{{
-      pos.rotateDegrees
-    }}</v-text-field>
-    <v-text-field solo readonly label="misMatchPercentage">{{
-      pos.misMatchPercentage
-    }}</v-text-field>
-    <v-row>
-      <v-col cols="6"><v-btn @click="checkImage">check</v-btn></v-col>
-      <v-text-field full-width v-model="gap"></v-text-field>
-    </v-row>
+    <v-card id="wrapper" class="mb-4" height="70vh" width="100%">
+      <video id="videoCapture" autoplay muted playsinline></video>
+      <canvas id="canvasCapture"></canvas>
+    </v-card>
+    <v-progress-linear
+      :color="progressColor"
+      height="18"
+      v-model="pos.matchPercentage"
+      striped
+    >
+      <template v-slot:default="{ value }"
+        ><p class="text-caption">{{ Math.ceil(value) }} %</p>
+      </template></v-progress-linear
+    >
   </v-container>
 </template>
 
@@ -23,13 +25,15 @@ interface DeviceOrientationEventiOS extends DeviceOrientationEvent {
 }
 
 const props = defineProps<{
+  venue: string;
   title: string;
   lat: number;
   lng: number;
   pic: string;
+  comments: string;
 }>();
 
-const gap = ref(50);
+const GAP = 10;
 
 const startVideoMethod = (): void => {
   startVideo();
@@ -52,8 +56,10 @@ const pos = reactive({
   gravityX: 0.0,
   gravityY: 0.0,
   gravityZ: 0.0,
-  misMatchPercentage: 0.0,
+  matchPercentage: 0.0,
 });
+
+const progressColor = ref("light-blue");
 
 const startVideo = async (): Promise<void> => {
   if (typeof window !== "object") return;
@@ -66,12 +72,6 @@ const startVideo = async (): Promise<void> => {
   if (canvas === null) return;
 
   const ctx = canvas.getContext("2d");
-
-  const devices = (await navigator.mediaDevices.enumerateDevices()).filter(
-    (d) => d.kind.includes("video")
-  );
-
-  console.log(devices);
 
   let constraints = {
     audio: false,
@@ -90,13 +90,13 @@ const startVideo = async (): Promise<void> => {
 
   video.srcObject = stream;
   video.play();
-  if (ctx !== null) {
-    const question = new Image();
-    question.src = "/images/box.png";
-    question.onload = () => {
-      updateCanvas(ctx, video, canvas, question);
-    };
-  }
+
+  if (ctx === null) return;
+  const target = new Image();
+  target.src = props.pic;
+  target.onload = () => {
+    updateCanvas(ctx, video, canvas, target);
+  };
 
   if (typeof requestPermission === "function") {
     const res = await requestPermission();
@@ -127,33 +127,37 @@ const updateCanvas = (
   ctx: CanvasRenderingContext2D,
   video: HTMLVideoElement,
   canvas: HTMLCanvasElement,
-  question: HTMLImageElement
+  target: HTMLImageElement
 ) => {
-  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-  ctx.drawImage(question, pos.frontToBack, pos.leftToRight, 50, 50);
-  pos.frameId = requestAnimationFrame(
-    updateCanvas.bind(null, ctx, video, canvas, question)
+  ctx.drawImage(
+    target,
+    pos.frontToBack,
+    pos.leftToRight,
+    canvas.width,
+    canvas.height
   );
-};
 
-const emits = defineEmits<{ (e: "nextTreasure"): void }>();
-
-const checkImage = () => {
-  const canvas = document.getElementById("canvasCapture") as HTMLCanvasElement;
-
-  if (canvas === null) return;
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  ctx.globalAlpha = 0.15;
 
   const diff = resemble(props.pic)
     .compareTo(canvas.toDataURL())
     .ignoreColors()
     .onComplete((data) => {
-      console.log(data);
-      pos.misMatchPercentage = data.misMatchPercentage;
-      if (pos.misMatchPercentage < gap.value) {
-        emits("nextTreasure");
-      }
+      pos.matchPercentage = 100 - data.misMatchPercentage;
+      progressColor.value =
+        pos.matchPercentage > 80 ? "deep-orange" : "light-blue";
+      // if (pos.matchPercentage > GAP) {
+      //   emits("nextTreasure");
+      // }
     });
+
+  pos.frameId = requestAnimationFrame(
+    updateCanvas.bind(null, ctx, video, canvas, target)
+  );
 };
+
+const emits = defineEmits<{ (e: "nextTreasure"): void }>();
 
 const handleOrientationEvent = (ev: DeviceOrientationEvent) => {
   pos.frontToBack = ev.alpha === null ? 0 : ev.alpha;
@@ -180,14 +184,22 @@ const handleMotionEvent = (ev: DeviceMotionEvent) => {
 </script>
 
 <style scoped>
-video {
-  display: none;
-}
-
-canvas {
+#videoCapture,
+#canvasCapture {
+  position: relative;
+  top: 0;
+  left: 0;
   margin: 0;
   padding: 0;
   height: 100%;
   width: 100%;
+}
+
+#videoCapture {
+  opacity: 0;
+}
+
+#canvasCapture {
+  opacity: 1;
 }
 </style>
