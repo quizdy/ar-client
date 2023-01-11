@@ -1,14 +1,14 @@
 {
+    "venue": "test",
     "targets": [{
-            "venue": "test",
             "no": 1,
             "title": "自宅",
             "lat": 35.18935466026968,
             "lng": 136.9887402834986,
             "pic": "/images/aaa.png",
             "comments": "家のテーブル"
-        }, {
-            "venue": "test",
+        },
+        {
             "no": 2,
             "title": "オンデイズ",
             "lat": 35.16105678202227,
@@ -16,6 +16,5 @@
             "pic": "/images/20220422133654_061702_30028589.jpg",
             "comments": "無印良品"
         }
-
     ]
 }

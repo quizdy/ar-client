@@ -1,6 +1,7 @@
 <template>
   <v-container>
     <v-text-field readonly v-model="props.venue"></v-text-field>
+    <v-text-field readonly v-model="props.no"></v-text-field>
     <v-text-field label="name" v-model="target.title"></v-text-field>
     <v-file-input
       accept="image/png, image/jpeg, image/bmp"
@@ -12,37 +13,40 @@
     <v-text-field readonly v-model="target.lat"></v-text-field>
     <v-text-field readonly v-model="target.lng"></v-text-field>
     <v-btn @click="confirm">upload</v-btn>
-    <v-dialog v-model="dialog" persistent max-width="400px">
-      <v-card>
-        <v-card-title>
-          <span class="headline">登録</span>
-        </v-card-title>
-        <v-card-text> 登録しますか？ </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="blue darken-1"
-            class="dialog-Button"
-            flat
-            @click="upload"
-            >はい</v-btn
-          >
-          <v-btn
-            color="blue darken-1"
-            class="dialog-Button"
-            flat
-            @click="cancel"
-            >いいえ</v-btn
-          >
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <client-only>
+      <v-dialog v-model="dialog" persistent>
+        <v-card>
+          <v-card-title>
+            <span class="headline">登録</span>
+          </v-card-title>
+          <v-card-text> 登録しますか？ </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="blue darken-1"
+              class="dialog-Button"
+              flat
+              @click="upload"
+              >はい</v-btn
+            >
+            <v-btn
+              color="blue darken-1"
+              class="dialog-Button"
+              flat
+              @click="cancel"
+              >いいえ</v-btn
+            >
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </client-only>
   </v-container>
 </template>
 
 <script setup lang="ts">
 const props = defineProps<{
   venue: string;
+  no: number;
   title: string;
   lat: number;
   lng: number;
@@ -52,6 +56,7 @@ const props = defineProps<{
 
 const target = reactive({
   venue: props.venue,
+  no: props.no,
   title: props.title,
   lat: props.lat,
   lng: props.lng,
