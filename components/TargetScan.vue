@@ -1,29 +1,30 @@
 <template>
-  <v-container>
-    <v-card class="mb-4" height="70vh" width="100%">
-      <div class="wrapper">
-        <video id="video" autoplay muted playsinline></video>
-        <canvas id="canvas"></canvas>
-        <v-img
-          id="pic"
-          :src="props.pic"
-          :style="{ opacity: opacity / 100 }"
-        ></v-img>
-      </div>
+  <div>
+    <div class="wrapper">
+      <video id="video" autoplay muted playsinline></video>
+      <canvas id="canvas"></canvas>
+      <v-img
+        id="pic"
+        :src="props.pic"
+        :style="{ opacity: opacity / 100 }"
+      ></v-img>
+    </div>
+    <v-card class="pa-2">
+      <v-progress-linear
+        class="mb-2"
+        :color="progressColor"
+        height="18"
+        v-model="pos.matchPercentage"
+        striped
+        rounded
+      >
+        <template v-slot:default="{ value }"
+          ><p class="text-caption">{{ Math.ceil(value) }} %</p>
+        </template></v-progress-linear
+      >
+      <v-slider max="100" min="0" color="blue" v-model="opacity"></v-slider>
     </v-card>
-    <v-progress-linear
-      class="mb-4"
-      :color="progressColor"
-      height="18"
-      v-model="pos.matchPercentage"
-      striped
-    >
-      <template v-slot:default="{ value }"
-        ><p class="text-caption">{{ Math.ceil(value) }} %</p>
-      </template></v-progress-linear
-    >
-    <v-slider max="100" min="0" color="blue" v-model="opacity"></v-slider>
-  </v-container>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -132,10 +133,10 @@ const refresh = (video: HTMLVideoElement, canvas: HTMLCanvasElement) => {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .wrapper {
   position: relative;
-  height: 100%;
+  height: 80svh;
   width: 100%;
 }
 
@@ -152,9 +153,5 @@ const refresh = (video: HTMLVideoElement, canvas: HTMLCanvasElement) => {
   padding: 0;
   height: 100%;
   width: 100%;
-}
-
-#pic {
-  opacity: 0.5;
 }
 </style>

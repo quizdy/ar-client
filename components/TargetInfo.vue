@@ -1,51 +1,32 @@
 <template>
-  <div>
-    <v-card class="mx-auto my-12" max-width="374">
-      <v-img height="250" :src="props.pic"></v-img>
-
-      <v-card-title>{{ props.title }}</v-card-title>
-
-      <v-card-text>
-        <v-row align="center" class="mx-0">
-          <v-rating
-            :value="4.5"
-            color="amber"
-            dense
-            half-increments
-            readonly
-            size="14"
-          ></v-rating>
-
-          <div class="grey--text ms-4">4.5 (413)</div>
-        </v-row>
-
-        <div class="my-4 text-subtitle-1">$ • Italian, Cafe</div>
-
-        <div>
-          Small plates, salads & sandwiches - an intimate setting with 12 indoor
-          seats plus patio seating.
+  <v-container>
+    <v-card class="mx-auto" max-width="600">
+      <v-img :src="props.pic"></v-img>
+      <v-card-title>{{ props.title }} </v-card-title>
+      <v-card-subtitle>
+        {{ props.comments }}
+      </v-card-subtitle>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn
+          :icon="show ? 'mdi-chevron-up' : 'mdi-chevron-down'"
+          @click="show = !show"
+        ></v-btn>
+      </v-card-actions>
+      <v-expand-transition>
+        <div v-show="show">
+          <v-divider></v-divider>
+          <v-card-text>
+            I'm a thing. But, like most politicians, he promised more than he
+            could deliver. You won't have time for sleeping, soldier, not with
+            all the bed making you'll be doing. Then we'll go with that data
+            file! Hey, you add a one and two zeros to that or we walk! You're
+            going to do his laundry? I've got to find a way to escape.
+          </v-card-text>
         </div>
-      </v-card-text>
-
-      <v-divider class="mx-4"></v-divider>
-
-      <v-card-title>Tonight's availability</v-card-title>
-
-      <v-card-text>
-        <v-chip-group
-          v-model="no"
-          active-class="deep-purple accent-4 white--text"
-          column
-        >
-          <v-chip>1</v-chip>
-
-          <v-chip>2</v-chip>
-
-          <v-chip>3</v-chip>
-        </v-chip-group>
-      </v-card-text>
+      </v-expand-transition>
     </v-card>
-  </div>
+  </v-container>
 </template>
 
 <script setup lang="ts">
@@ -59,8 +40,7 @@ const props = defineProps<{
   comments: string;
 }>();
 
-const no = ref<number>(props.no);
-const loading = ref<boolean>(false);
+const show = ref<boolean>(false);
 </script>
 
 <style scoped lang="scss"></style>

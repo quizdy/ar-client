@@ -1,11 +1,11 @@
-import fs from "fs";
-import path from "path"
+import fs from 'fs';
+import path from 'path'
 import { createCommonJS } from 'mlly'
 
 const { __dirname } = createCommonJS(import.meta.url)
 
-const JSON_PATH = "../../assets/jsons"
-const IMAGES_PATH = "../../public/images"
+const JSONS_PATH = '../../assets/jsons'
+const IMAGES_PATH = '../../public/images'
 
 export default defineEventHandler(async(e) => {
   const body = await readBody(e)
@@ -34,15 +34,15 @@ const decodeBase64 = (updateTarget: any): string => {
       console.log(e)
     }
 
-    return "/images/" + updateTarget.title + '.' + ext
+    return '/images/' + updateTarget.venue + '/' + updateTarget.title + '.' + ext
   }
   else {
-    return ""
+    return ''
   }
 }
 
 const updateJson = (updateTarget: any): boolean => {
-  const jsonPath = path.join(__dirname, JSON_PATH, updateTarget.venue + ".json")
+  const jsonPath = path.join(__dirname, JSONS_PATH, updateTarget.venue + '.json')
 
   if (!fs.existsSync(jsonPath)) {
     return false

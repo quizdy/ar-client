@@ -8,3 +8,5 @@ node_modules
 dist
 keys
 .pem
+public
+assets/jsons

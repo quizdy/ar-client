@@ -2,7 +2,7 @@
   <v-container>
     <v-text-field readonly v-model="props.venue"></v-text-field>
     <v-text-field readonly v-model="props.no"></v-text-field>
-    <v-text-field label="name" v-model="target.title"></v-text-field>
+    <v-text-field label="title" v-model="target.title"></v-text-field>
     <v-file-input
       accept="image/png, image/jpeg, image/bmp"
       placeholder="Pick a picture"
@@ -76,13 +76,20 @@ const cancel = () => {
   dialog.value = false;
 };
 
-onMounted(() => {
-  if (navigator.geolocation && navigator.geolocation.watchPosition) {
-    navigator.geolocation.watchPosition((position) => {
-      target.lat = position.coords.latitude;
-      target.lng = position.coords.longitude;
-    });
-  }
+onMounted(async () => {
+  if (
+    !navigator.geolocation ||
+    !navigator.geolocation.getCurrentPosition ||
+    !navigator.geolocation.watchPosition
+  )
+    return;
+
+  const position: any = await new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+
+  target.lat = position.coords.latitude;
+  target.lng = position.coords.longitude;
 });
 
 const onFileChanged = (e: Event) => {
@@ -94,7 +101,17 @@ const onFileChanged = (e: Event) => {
 const emits = defineEmits<{ (e: "update", target: any): void }>();
 
 const upload = () => {
-  emits("update", target);
+  const reader = new FileReader();
+  reader.readAsDataURL(target.file);
+
+  reader.onload = async (e: any) => {
+    target.base64 = e.currentTarget.result;
+    console.log("target", target);
+    const { data: result } = await useFetch("/api/target", {
+      method: "POST",
+      body: { target: target },
+    });
+  };
   dialog.value = false;
 };
 </script>

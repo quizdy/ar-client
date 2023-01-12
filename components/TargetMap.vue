@@ -1,8 +1,10 @@
 <template>
-  <v-container>
-    <v-card class="map mb-4" height="70vh" width="100%"></v-card>
-    <v-text-field solo readonly>{{ distance }} km</v-text-field>
-  </v-container>
+  <div>
+    <div id="map"></div>
+    <v-card class="pa-2">
+      <v-text-field solo readonly>{{ distance }} km</v-text-field>
+    </v-card>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -52,7 +54,7 @@ onMounted(async () => {
 
   const google = await loader.load();
 
-  gmap.value = new google.maps.Map(document.getElementsByClassName("map")[0], {
+  gmap.value = new google.maps.Map(document.getElementById("map"), {
     center: {
       lat: pos.lat,
       lng: pos.lng,
@@ -143,4 +145,9 @@ const beep = (tempo: number, volume: number) => {
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+#map {
+  height: 80svh;
+  width: 100%;
+}
+</style>
