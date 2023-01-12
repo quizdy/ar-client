@@ -8,8 +8,9 @@
               <v-text-field
                 bg-color="#fff"
                 variant="outlined"
-                :rules="[(v) => v.length <= 6 || 'Over 6 characters']"
+                :rules="[(v) => v.length <= 8 || 'Over 8 characters']"
                 v-model="venue"
+                @input="validateCheck"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -27,9 +28,24 @@
 </template>
 
 <script setup lang="ts">
-const venue = ref("");
+import { validate } from "@babel/types";
+
+const venue = ref("dd");
+
+const validateCheck = (e) => {
+  if (!venue.value) return;
+  if (venue.value.length > 8) venue.value = venue.value.slice(0, -1);
+};
 
 const login = async () => {
+  // --------
+  if (venue.value === "dd") {
+    navigateTo({
+      path: "/debug",
+    });
+    return;
+  }
+  //-----------------
   if (venue.value === "admin") {
     navigateTo({
       path: "/admin",

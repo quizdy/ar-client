@@ -5,7 +5,6 @@ import { createCommonJS } from 'mlly'
 const { __dirname } = createCommonJS(import.meta.url)
 
 const JSONS_PATH = '../../assets/jsons'
-const IMAGES_PATH = '../../public/images'
 
 export default defineEventHandler(async(e) => {
   const body = await readBody(e)
