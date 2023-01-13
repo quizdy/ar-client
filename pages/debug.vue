@@ -8,5 +8,5 @@ const { data: res } = await useFetch("/api/venues", {
 });
 
 const venues = ref([]);
-venues.value = res.value?.venues;
+console.log(res.value?.jsons);
 </script>
