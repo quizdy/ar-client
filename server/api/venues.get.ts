@@ -7,14 +7,23 @@ const JSONS_PATH = "../../assets/jsons"
 
 export default defineEventHandler(() => {
   const jsonsDir = path.join(__dirname, JSONS_PATH)
-  let jsons;
   try {
-    jsons = fs.readdirSync(jsonsDir)
+    const jsons = {
+      path: jsonsDir,
+      msg: JSON.stringify(fs.readdirSync(jsonsDir)),
+    }
+    return {
+      jsons
+    }
   }
   catch(e) {
-    jsons.path = jsonsDir;
-    jsons.code = e.code;
-    jsons.msg = JSON.stringify(e);
+    const jsons = {
+      path: jsonsDir,
+      msg: JSON.stringify(e),
+    }
+    return {
+      jsons
+    }
   }
   
   const venues = []
@@ -27,7 +36,5 @@ export default defineEventHandler(() => {
   //   venues.push(venue)
   // }
 
-  return {
-    jsons
-  }
+
 })
