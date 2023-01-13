@@ -20,22 +20,20 @@ export default defineEventHandler(async(e) => {
 const updateJson = (venue: string): boolean => {
   const jsonPath = path.join(__dirname, JSONS_PATH, venue + '.json')
 
-  let json = {}
-  if (!fs.existsSync(jsonPath)) {
-    json = {
-      venue: venue,
-      targets: []
-    }
+  const json = {
+    venue: venue,
+    targets: []
   }
-  else {
-    json = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
+
+  if (fs.existsSync(jsonPath)) {
     json.venue = venue
+    json.targets = JSON.parse(fs.readFileSync(jsonPath, 'utf-8')).targets;
   }
 
   try {
     fs.writeFileSync(jsonPath, JSON.stringify(json, null, 2))
   } catch (e) {
-    throw new Error(e)
+    return false
   }
 
   return true

@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'fs'
 import path from 'path'
 import { createCommonJS } from 'mlly'
 
@@ -26,7 +26,7 @@ const decodeBase64 = (updateTarget: any): string => {
     const decoded = Buffer.from(data, 'base64')
     const ext = base64.toString().slice(base64.indexOf('/') + 1, base64.indexOf(';'))
     const dir = path.join(__dirname, IMAGES_PATH, updateTarget.venue)
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
     const filePath = path.join(__dirname, IMAGES_PATH, updateTarget.venue, updateTarget.title + '.' + ext)
     try {
       fs.writeFileSync(filePath, decoded, 'base64')
@@ -48,10 +48,10 @@ const updateJson = (updateTarget: any): boolean => {
     return false
   }
   
-  const json: any = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
-  const target = json.targets.filter((t: any) => t.no === updateTarget.no)
+  const json = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'))
+  const targets = json.targets.filter((t: any) => t.no === updateTarget.no)
 
-  if (target.length === 0) {
+  if (targets.length === 0) {
     const t = {
       no: json.targets.length + 1,
       title: updateTarget.title,
@@ -62,13 +62,13 @@ const updateJson = (updateTarget: any): boolean => {
     }
     json.targets.push(t)
   }
-  else if (target.length === 1) {
-    target[0].no = updateTarget.no
-    target[0].title = updateTarget.title
-    target[0].lat = updateTarget.lat
-    target[0].lng = updateTarget.lng
-    target[0].pic = updateTarget.pic
-    target[0].comments = updateTarget.comments
+  else if (targets.length === 1) {
+    targets[0].no = updateTarget.no
+    targets[0].title = updateTarget.title
+    targets[0].lat = updateTarget.lat
+    targets[0].lng = updateTarget.lng
+    targets[0].pic = updateTarget.pic
+    targets[0].comments = updateTarget.comments
   }
   else {
     return false
@@ -77,7 +77,7 @@ const updateJson = (updateTarget: any): boolean => {
   try {
     fs.writeFileSync(jsonPath, JSON.stringify(json, null, 2))
   } catch (e) {
-    throw new Error(e)
+    return false
   }
 
   return true

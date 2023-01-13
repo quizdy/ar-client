@@ -17,7 +17,7 @@ export default defineEventHandler((e) => {
     }
   }
 
-  const json: any = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
+  const json = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
 
   return {
     json

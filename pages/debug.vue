@@ -1,5 +1,5 @@
 <template>
-  <v-app>{{ aaa }}</v-app>
+  <v-app>{{ venues }}</v-app>
 </template>
 
 <script setup lang="ts">
@@ -8,6 +8,5 @@ const { data: res } = await useFetch("/api/venues", {
 });
 
 const venues = ref([]);
-console.log(res.value?.jsons);
-const aaa = res.value?.jsons;
+const venues = res.value?.jsons;
 </script>
