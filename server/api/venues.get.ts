@@ -9,15 +9,8 @@ export default defineEventHandler(() => {
   const jsonsDir = path.join(__dirname, JSONS_PATH)
 
   if (!fs.existsSync(jsonsDir)) {
-    const jsons = {
-      path: jsonsDir,
-      msg: 'noDir',
-    }
-    return {
-      jsons
-    }
+    fs.mkdirSync(jsonsDir)
   }
-  else {
  
   try {
     const jsons = {
@@ -36,7 +29,6 @@ export default defineEventHandler(() => {
     return {
       jsons
     }
-  }
 }
   const venues = []
   // for(let i = 0; i < jsons.length; i++) {

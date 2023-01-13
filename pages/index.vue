@@ -23,16 +23,22 @@
           </v-row>
         </v-container>
       </v-form>
+      <v-snackbar v-model="snackbar.show" :timeout="snackbar.timeout">
+        {{ snackbar.msg }}
+      </v-snackbar>
     </div>
   </v-app>
 </template>
 
 <script setup lang="ts">
-import { validate } from "@babel/types";
-
 const venue = ref("dd");
 
-const validateCheck = (e) => {
+const snackbar = reactive({
+  show: false,
+  timeout: 2000,
+  msg: "aaa",
+});
+const validateCheck = () => {
   if (!venue.value) return;
   if (venue.value.length > 8) venue.value = venue.value.slice(0, -1);
 };
@@ -65,6 +71,9 @@ const login = async () => {
         venue: venue.value,
       },
     });
+  } else {
+    snackbar.msg = "not found venue";
+    snackbar.show = true;
   }
 };
 </script>
