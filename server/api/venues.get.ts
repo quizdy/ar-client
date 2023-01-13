@@ -9,7 +9,19 @@ export default defineEventHandler(() => {
   const jsonsDir = path.join(__dirname, JSONS_PATH)
 
   if (!fs.existsSync(jsonsDir)) {
-    fs.mkdirSync(jsonsDir)
+    
+
+    try {
+      fs.mkdirSync(jsonsDir)
+    }
+    catch(e) {
+      const jsons = {
+        path: jsonsDir + '_bbb_' + fs.existsSync(jsonsDir),
+        msg: JSON.stringify(e),
+      }
+      return {
+        jsons
+      }
   }
  
   try {

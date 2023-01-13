@@ -23,9 +23,11 @@
           </v-row>
         </v-container>
       </v-form>
-      <v-snackbar v-model="snackbar.show" :timeout="snackbar.timeout">
-        {{ snackbar.msg }}
-      </v-snackbar>
+      <client-only>
+        <v-snackbar v-model="snackbar.show" :timeout="snackbar.timeout">
+          {{ snackbar.msg }}
+        </v-snackbar>
+      </client-only>
     </div>
   </v-app>
 </template>
@@ -38,6 +40,7 @@ const snackbar = reactive({
   timeout: 2000,
   msg: "aaa",
 });
+
 const validateCheck = () => {
   if (!venue.value) return;
   if (venue.value.length > 8) venue.value = venue.value.slice(0, -1);
