@@ -12,7 +12,9 @@ export default defineEventHandler(() => {
     jsons = fs.readdirSync(jsonsDir)
   }
   catch(e) {
-    jsons = e
+    jsons.path = jsonsDir;
+    jsons.code = e.code;
+    jsons.msg = JSON.stringify(e);
   }
   
   const venues = []

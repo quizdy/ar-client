@@ -11,7 +11,6 @@
     "nit": "npx nuxi dev --https --ssl-cert ./keys/nitech.pem --ssl-key ./keys/nitech-key.pem"
   },
   "devDependencies": {
-    "@azure/static-web-apps-cli": "^1.0.4",
     "@types/google.maps": "^3.51.0",
     "@types/resemblejs": "^4.1.0",
     "nuxt": "3.0.0"
