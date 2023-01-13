@@ -22,6 +22,7 @@ export default defineEventHandler(() => {
       return {
         jsons
       }
+    }
   }
  
   try {
