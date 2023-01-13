@@ -28,7 +28,6 @@ const decodeBase64 = (venue: string, updateTarget: any): string => {
     const dir = path.join(__dirname, IMAGES_PATH, venue)
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
     const filePath = path.join(__dirname, IMAGES_PATH, venue, updateTarget.title + '.' + ext)
-    if (!fs.existsSync(filePath)) fs.mkdirSync(filePath, { recursive: true })
     try {
       fs.writeFileSync(filePath, decoded, 'base64')
     } catch (e: any) {
