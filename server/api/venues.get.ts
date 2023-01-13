@@ -12,7 +12,7 @@ export default defineEventHandler(() => {
     
 
     try {
-      fs.mkdirSync(jsonsDir)
+      fs.mkdirSync(jsonsDir, { recursive: true })
     }
     catch(e) {
       const jsons = {
