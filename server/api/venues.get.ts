@@ -7,6 +7,18 @@ const JSONS_PATH = "../../assets/jsons"
 
 export default defineEventHandler(() => {
   const jsonsDir = path.join(__dirname, JSONS_PATH)
+
+  if (!fs.existsSync(jsonsDir)) {
+    const jsons = {
+      path: jsonsDir,
+      msg: 'noDir',
+    }
+    return {
+      jsons
+    }
+  }
+  else {
+ 
   try {
     const jsons = {
       path: jsonsDir,
@@ -18,14 +30,14 @@ export default defineEventHandler(() => {
   }
   catch(e) {
     const jsons = {
-      path: jsonsDir,
+      path: jsonsDir + '_aaaa_' + fs.existsSync(jsonsDir),
       msg: JSON.stringify(e),
     }
     return {
       jsons
     }
   }
-  
+}
   const venues = []
   // for(let i = 0; i < jsons.length; i++) {
   //   const venue = {
