@@ -10,16 +10,15 @@ export default defineEventHandler((e) => {
   const jsonPath = path.join(__dirname, JSONS_PATH, query.venue + ".json")
   if (!fs.existsSync(jsonPath)) {
     return {
-      json: {
-        venue: "",
-        targets: []
-      }
+      venue: "",
+      targets: []
     }
   }
 
   const json = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
 
   return {
-    json
+    venue: json.venue,
+    targets: json.targets
   }
 })

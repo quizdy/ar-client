@@ -12,37 +12,37 @@ export default defineEventHandler(async(e) => {
   if (body === null) return {
     ret: false
   }
-  body.target.pic = decodeBase64(body.target)
-  const ret = updateJson(body.target)
+  body.target.pic = decodeBase64(body.venue, body.target)
+  const ret = updateJson(body.venue, body.target)
   return {
     ret: ret
   }
 })
 
-const decodeBase64 = (updateTarget: any): string => {
+const decodeBase64 = (venue: string, updateTarget: any): string => {
   const base64 = updateTarget.base64
   if (base64.startsWith('data:image')) {
     const data = base64.replace(/^data:\w+\/\w+;base64,/, '')
     const decoded = Buffer.from(data, 'base64')
     const ext = base64.toString().slice(base64.indexOf('/') + 1, base64.indexOf(';'))
-    const dir = path.join(__dirname, IMAGES_PATH, updateTarget.venue)
+    const dir = path.join(__dirname, IMAGES_PATH, venue)
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
-    const filePath = path.join(__dirname, IMAGES_PATH, updateTarget.venue, updateTarget.title + '.' + ext)
+    const filePath = path.join(__dirname, IMAGES_PATH, venue, updateTarget.title + '.' + ext)
     try {
       fs.writeFileSync(filePath, decoded, 'base64')
     } catch (e: any) {
       console.log(e)
     }
 
-    return '/images/' + updateTarget.venue + '/' + updateTarget.title + '.' + ext
+    return '/images/' + venue + '/' + updateTarget.title + '.' + ext
   }
   else {
     return ''
   }
 }
 
-const updateJson = (updateTarget: any): boolean => {
-  const jsonPath = path.join(__dirname, JSONS_PATH, updateTarget.venue + '.json')
+const updateJson = (venue: string, updateTarget: any): boolean => {
+  const jsonPath = path.join(__dirname, JSONS_PATH, venue + '.json')
 
   if (!fs.existsSync(jsonPath)) {
     return false

@@ -59,7 +59,7 @@
 <script setup lang="ts">
 const route = useRoute();
 const venue = ref(route.query.venue ? route.query.venue : "");
-const targets: any = ref([]);
+const targets = ref([]);
 const currentComponent = ref("");
 
 const refTargetMap = ref();
@@ -97,8 +97,8 @@ const { data: res } = await useFetch("/api/targets", {
   params: { venue: venue },
 });
 
-venue.value = res.value?.json.venue;
-targets.value = res.value?.json.targets;
+venue.value = res.value?.venue;
+targets.value = res.value?.targets;
 </script>
 
 <style scoped lang="scss"></style>

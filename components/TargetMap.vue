@@ -83,7 +83,7 @@ const watchPosition = (position: any) => {
   currentMarker.setMap(gmap.value);
 
   const icon = {
-    url: "/images/box.png",
+    url: "/box.png",
     scaledSize: new google.maps.Size(40, 30),
     origin: new google.maps.Point(0, 0),
     anchor: new google.maps.Point(0, 0),

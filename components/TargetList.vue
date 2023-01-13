@@ -1,31 +1,29 @@
 <template>
   <div>
-    <v-card class="ma-2">
-      <template v-for="(t, i) in targets">
-        <v-list lines="one">
-          <v-list-item
-            :key="t.no"
-            :title="t.title"
-            :prepend-avatar="t.pic"
-            @click="selectedTarget(t)"
-          >
-          </v-list-item>
-        </v-list>
-        <v-divider v-if="i < t.length - 1" :key="t.no"></v-divider>
-      </template>
-    </v-card>
-    <v-btn class="btnAddTarget" @click="addTarget()"
-      ><v-icon>mdi-plus-circle</v-icon></v-btn
-    >
+    <v-sheet>
+      <v-card class="ma-2">
+        <template v-for="(t, i) in targets">
+          <v-list>
+            <v-list-item
+              :title="t.title"
+              :prepend-avatar="t.pic"
+              @click="selectedTarget(t)"
+            >
+            </v-list-item>
+          </v-list>
+          <v-divider v-if="i < targets.length - 1" :key="i"></v-divider>
+        </template>
+      </v-card>
+    </v-sheet>
   </div>
 </template>
 
 <script setup lang="ts">
+const emitTarget = defineEmits<{ (e: "editTarget", t: any): void }>();
+
 const props = defineProps<{
   venue: string;
 }>();
-
-const emits = defineEmits<{ (e: "setTarget"): void }>();
 
 const targets = ref([]);
 
@@ -34,30 +32,11 @@ const { data: res } = await useFetch("/api/targets", {
   params: { venue: props.venue },
 });
 
-targets.value = res.value?.json.targets;
+targets.value = res.value?.targets;
 
 const selectedTarget = (t: any) => {
-  emits("setTarget", t);
-};
-
-const addTarget = () => {
-  const t = {
-    venue: props.venue,
-    no: targets.value.length + 1,
-    title: "",
-    lat: 0.0,
-    lng: 0.0,
-    pic: "",
-    comments: "",
-  };
-  emits("setTarget", t);
+  emitTarget("editTarget", t);
 };
 </script>
 
-<style scoped lang="scss">
-.btnAddTarget {
-  position: absolute;
-  bottom: 1rem;
-  right: 1rem;
-}
-</style>
+<style scoped lang="scss"></style>

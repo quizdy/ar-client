@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <div class="background-img">
-      <v-form>
+      <v-form @submit.prevent="login">
         <v-container>
           <v-row>
             <v-col>
@@ -37,13 +37,13 @@
 </template>
 
 <script setup lang="ts">
-const venue = ref("dd");
+const venue = ref("");
 
 const snackbar = reactive({
   show: false,
   timeout: 2000,
   color: "",
-  msg: "aaa",
+  msg: "",
 });
 
 const validateCheck = () => {
@@ -52,14 +52,6 @@ const validateCheck = () => {
 };
 
 const login = async () => {
-  // --------
-  if (venue.value === "dd") {
-    navigateTo({
-      path: "/debug",
-    });
-    return;
-  }
-  //-----------------
   if (venue.value === "admin") {
     navigateTo({
       path: "/admin",
@@ -72,7 +64,7 @@ const login = async () => {
     params: { venue: venue.value },
   });
 
-  if (res.value?.json.venue !== "" && res.value?.json.targets.length > 0) {
+  if (res.value?.venue !== "" && res.value?.targets.length > 0) {
     navigateTo({
       path: "/user",
       query: {
@@ -80,7 +72,7 @@ const login = async () => {
       },
     });
   } else {
-    snackbar.msg = "not found venue";
+    snackbar.msg = "入力した会場は見つかりませんでした";
     snackbar.color = "error";
     snackbar.show = true;
   }

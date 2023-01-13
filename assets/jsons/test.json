@@ -1,20 +1,21 @@
 {
-    "venue": "test",
-    "targets": [{
-            "no": 1,
-            "title": "自宅",
-            "lat": 35.18935466026968,
-            "lng": 136.9887402834986,
-            "pic": "/images/aaa.png",
-            "comments": "家のテーブル"
-        },
-        {
-            "no": 2,
-            "title": "オンデイズ",
-            "lat": 35.16105678202227,
-            "lng": 136.98562526441762,
-            "pic": "/images/20220422133654_061702_30028589.jpg",
-            "comments": "無印良品"
-        }
-    ]
+  "venue": "test",
+  "targets": [
+    {
+      "no": 1,
+      "title": "a",
+      "lat": 35.1797248,
+      "lng": 137.0259456,
+      "pic": "/images/test/a.jpeg",
+      "comments": ""
+    },
+    {
+      "no": 2,
+      "title": "b",
+      "lat": 35.1797248,
+      "lng": 137.0259456,
+      "pic": "/images/test/b.png",
+      "comments": ""
+    }
+  ]
 }

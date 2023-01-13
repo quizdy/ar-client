@@ -11,10 +11,19 @@ export default defineEventHandler(async(e) => {
   if (body === null) return {
     ret: false
   }
-  const ret = updateJson(body.venue)
-  return {
-    ret: ret
+  if (body.method === 'del') {
+    const ret = deleteJson(body.venue)
+    return {
+      ret: ret
+    }
   }
+  else {
+    const ret = updateJson(body.venue)
+    return {
+      ret: ret
+    }
+  }
+
 })
 
 const updateJson = (venue: string): boolean => {
@@ -36,5 +45,10 @@ const updateJson = (venue: string): boolean => {
     return false
   }
 
+  return true
+}
+
+const deleteJson = (venue: string): boolean => {
+  console.log('delete', venue)
   return true
 }

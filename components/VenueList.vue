@@ -1,64 +1,33 @@
 <template>
   <div>
-    <v-card class="ma-2">
-      <template v-for="(v, i) in venues">
-        <v-list lines="one">
-          <v-list-item
-            :key="i"
-            :title="v.title"
-            @click="selectedVenue(v.title)"
-          >
-          </v-list-item>
-        </v-list>
-        <v-divider v-if="i < v.length - 1" :key="i"></v-divider>
-      </template>
-    </v-card>
-    <div class="footer">
-      <v-text-field
-        v-model="venue"
-        max-heigth="36px"
-        max-width="120px"
-      ></v-text-field>
-      <v-btn max-heigth="36px" max-width="36px" @click="showDialog"
-        ><v-icon>mdi-plus-circle</v-icon></v-btn
-      >
-    </div>
-    <client-only>
-      <v-dialog v-model="dialog" persistent>
-        <v-card>
-          <v-card-title>
-            <span class="headline">登録</span>
-          </v-card-title>
-          <v-card-text> 登録しますか？ </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
-              color="blue darken-1"
-              class="dialog-Button"
-              flat
-              @click="updateVenue"
-              >はい</v-btn
-            >
-            <v-btn
-              color="blue darken-1"
-              class="dialog-Button"
-              flat
-              @click="cancel"
-              >いいえ</v-btn
-            >
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </client-only>
+    <v-sheet>
+      <v-card class="ma-2">
+        <template v-for="(v, i) in venues">
+          <v-list>
+            <v-list-item :title="v" @click="selectedVenue(v)">
+              <template v-slot:append>
+                <v-btn
+                  color="grey-lighten-1"
+                  icon="mdi-delete"
+                  variant="text"
+                  @click.stop="delVenue(v)"
+                ></v-btn> </template
+            ></v-list-item>
+          </v-list>
+          <v-divider v-if="i < venues.length - 1" :key="i"></v-divider>
+        </template>
+      </v-card>
+    </v-sheet>
   </div>
 </template>
 
 <script setup lang="ts">
-const emits = defineEmits<{ (e: "setVenue"): void }>();
+const emitVenue = defineEmits<{
+  (e: "selectedVenue", venue: string): void;
+  (e: "editVenue", venue: string): void;
+}>();
 
 const venues = ref([]);
-const venue = ref("");
-const dialog = ref(false);
 
 const { data: res } = await useFetch("/api/venues", {
   method: "GET",
@@ -66,43 +35,16 @@ const { data: res } = await useFetch("/api/venues", {
 
 venues.value = res.value?.venues;
 
-const selectedVenue = async (title: string) => {
-  const { data: res } = await useFetch("/api/targets", {
-    method: "GET",
-    params: { venue: title },
-  });
-  emits("setVenue", res.value?.json);
+const selectedVenue = (venue: string) => {
+  emitVenue("selectedVenue", venue);
 };
 
-const showDialog = () => {
-  dialog.value = true;
-};
-
-const updateVenue = async () => {
+const delVenue = async (venue: string) => {
   const { data: result } = await useFetch("/api/venue", {
     method: "POST",
-    body: { venue: venue },
+    body: { method: "del", venue: venue },
   });
-  const { data: res } = await useFetch("/api/venues", {
-    method: "GET",
-  });
-  venues.value = res.value?.venues;
-  dialog.value = false;
-};
-
-const cancel = () => {
-  dialog.value = false;
 };
 </script>
 
-<style scoped lang="scss">
-.footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-}
-</style>
+<style scoped lang="scss"></style>
