@@ -24,7 +24,11 @@
         </v-container>
       </v-form>
       <client-only>
-        <v-snackbar v-model="snackbar.show" :timeout="snackbar.timeout">
+        <v-snackbar
+          v-model="snackbar.show"
+          :timeout="snackbar.timeout"
+          :color="snackbar.color"
+        >
           {{ snackbar.msg }}
         </v-snackbar>
       </client-only>
@@ -38,6 +42,7 @@ const venue = ref("dd");
 const snackbar = reactive({
   show: false,
   timeout: 2000,
+  color: "",
   msg: "aaa",
 });
 
@@ -76,6 +81,7 @@ const login = async () => {
     });
   } else {
     snackbar.msg = "not found venue";
+    snackbar.color = "error";
     snackbar.show = true;
   }
 };
