@@ -7,7 +7,14 @@ const JSONS_PATH = "../../assets/jsons"
 
 export default defineEventHandler(() => {
   const jsonsDir = path.join(__dirname, JSONS_PATH)
-  const jsons = fs.readdirSync(jsonsDir)
+  let jsons;
+  try {
+    jsons = fs.readdirSync(jsonsDir)
+  }
+  catch(e) {
+    jsons = e
+  }
+  
   const venues = []
   // for(let i = 0; i < jsons.length; i++) {
   //   const venue = {
@@ -17,13 +24,8 @@ export default defineEventHandler(() => {
   //   }
   //   venues.push(venue)
   // }
-  const venue = {
-    no: 1,
-    title: jsons,
-    image: "/images/aa/" + jsons
-  }
-  venues.push(venue)
+
   return {
-    venues
+    jsons
   }
 })
