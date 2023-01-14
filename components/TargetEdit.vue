@@ -132,7 +132,7 @@ const updateTarget = () => {
     console.log(result);
   };
   dialog.value = false;
-  emit("showTargetEdit", false);
+  // emit("showTargetEdit", false);
 };
 
 onMounted(async () => {
