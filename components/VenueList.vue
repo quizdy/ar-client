@@ -29,6 +29,8 @@ const emitVenue = defineEmits<{
 
 const venues = ref([]);
 
+const dialog = ref(false);
+
 const { data: res } = await useFetch("/api/venues", {
   method: "GET",
 });

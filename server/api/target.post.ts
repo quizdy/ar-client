@@ -15,8 +15,7 @@ export default defineEventHandler(async(e) => {
   body.target.pic = decodeBase64(body.venue, body.target)
   const ret = updateJson(body.venue, body.target)
   return {
-    // ret: ret
-    ret: body.target.pic
+    ret: ret
   }
 })
 
@@ -30,14 +29,22 @@ const decodeBase64 = (venue: string, updateTarget: any): string => {
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
     const filePath = path.join(__dirname, IMAGES_PATH, venue, updateTarget.title + '.' + ext)
     try {
-      fs.writeFileSync(filePath, decoded, 'base64')
+      // fs.writeFileSync(filePath, decoded, 'base64')
+
+      const aaaa = path.join(__dirname, JSONS_PATH, venue, updateTarget.title + '.' + ext)
+      fs.writeFileSync(aaaa, decoded, 'base64')
+
+      const bbbb = path.join(__dirname, IMAGES_PATH, updateTarget.title + '.' + ext)
+      fs.writeFileSync(bbbb, decoded, 'base64')
+
     } catch (e: any) {
       console.log(e)
       return JSON.stringify(e)
     }
+    // return '/images/' + venue + '/' + updateTarget.title + '.' + ext
 
-    // return '/images/' + venue + '/' + updateTarget.title + '.' + 
-    return filePath
+    return '/' + venue + '/' + updateTarget.title + '.' + ext
+
   }
   else {
     return ''

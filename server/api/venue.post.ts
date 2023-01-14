@@ -5,6 +5,7 @@ import { createCommonJS } from 'mlly'
 const { __dirname } = createCommonJS(import.meta.url)
 
 const JSONS_PATH = '../../assets/jsons'
+const IMAGES_PATH = '../../public/images'
 
 export default defineEventHandler(async(e) => {
   const body = await readBody(e)
@@ -12,7 +13,7 @@ export default defineEventHandler(async(e) => {
     ret: false
   }
   if (body.method === 'del') {
-    const ret = deleteJson(body.venue)
+    const ret = deleteVenue(body.venue)
     return {
       ret: ret
     }
@@ -23,7 +24,6 @@ export default defineEventHandler(async(e) => {
       ret: ret
     }
   }
-
 })
 
 const updateJson = (venue: string): boolean => {
@@ -48,7 +48,16 @@ const updateJson = (venue: string): boolean => {
   return true
 }
 
-const deleteJson = (venue: string): boolean => {
-  console.log('delete', venue)
+const deleteVenue = (venue: string): boolean => {
+  const jsonPath = path.join(__dirname, JSONS_PATH, venue + '.json')
+  if (fs.existsSync(jsonPath)) {
+    fs.unlinkSync(jsonPath);
+  }
+
+  const imageDir = path.join(__dirname, IMAGES_PATH, venue)
+  if (fs.existsSync(imageDir)) {
+    fs.rmdirSync(imageDir, { recursive: true });
+  }
+
   return true
 }
