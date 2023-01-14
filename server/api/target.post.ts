@@ -15,7 +15,8 @@ export default defineEventHandler(async(e) => {
   body.target.pic = decodeBase64(body.venue, body.target)
   const ret = updateJson(body.venue, body.target)
   return {
-    ret: ret
+    // ret: ret
+    ret: body.target.pic
   }
 })
 
@@ -32,6 +33,7 @@ const decodeBase64 = (venue: string, updateTarget: any): string => {
       fs.writeFileSync(filePath, decoded, 'base64')
     } catch (e: any) {
       console.log(e)
+      return JSON.stringify(e)
     }
 
     return '/images/' + venue + '/' + updateTarget.title + '.' + ext

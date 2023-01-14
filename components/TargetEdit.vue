@@ -129,6 +129,7 @@ const updateTarget = () => {
       method: "POST",
       body: { method: "update", venue: venue, target: target },
     });
+    console.log(result);
   };
   dialog.value = false;
   emit("showTargetEdit", false);
