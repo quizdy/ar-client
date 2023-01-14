@@ -36,7 +36,8 @@ const decodeBase64 = (venue: string, updateTarget: any): string => {
       return JSON.stringify(e)
     }
 
-    return '/images/' + venue + '/' + updateTarget.title + '.' + ext
+    // return '/images/' + venue + '/' + updateTarget.title + '.' + 
+    return filePath
   }
   else {
     return ''
