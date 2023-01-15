@@ -52,6 +52,15 @@ const validateCheck = () => {
 };
 
 const login = async () => {
+  // --------------
+  if (venue.value === "") {
+    navigateTo({
+      path: "/d",
+    });
+    return;
+  }
+  // --------------
+
   if (venue.value === "admin") {
     navigateTo({
       path: "/admin",
