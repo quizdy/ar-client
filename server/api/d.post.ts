@@ -14,6 +14,7 @@ export default defineEventHandler(async(e) => {
     dir: false,
     dir1: false,
     dir2: false,
+    dddd: false,
     aaa: '',
     msg: ""
   };
@@ -35,7 +36,7 @@ export default defineEventHandler(async(e) => {
 
 
   try {
-    fs.writeFileSync(p, 'test_test_aaaaaaaaaaaaaaa')
+    fs.writeFileSync(aaa, 'test_test_aaaaaaaaaaaaaaa')
     ret.msg = 'write ok'
   }
   catch(e) {
