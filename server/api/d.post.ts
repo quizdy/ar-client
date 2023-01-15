@@ -6,7 +6,7 @@ const { __dirname } = createCommonJS(import.meta.url)
 
 export default defineEventHandler(async(e) => {
 
-  const dir = path.join(__dirname, '../../public/')
+  const dir = path.join(__dirname, '../../public/aaa/bbb/ccc')
 
   let ret = {
     dir: false,
@@ -22,12 +22,12 @@ export default defineEventHandler(async(e) => {
     ret.dir = false
   }
 
-  const aaa = path.join(__dirname, '../../public/', 'test.txt');
+  const aaa = path.join(__dirname, '../../public/aaa/bbb/ccc', 'test.txt');
   ret.aaa = aaa
 
 
   try {
-    fs.writeFileSync(p, 'test_test')
+    fs.writeFileSync(p, 'test_test_aaaaaaaaaaaaaaa')
     ret.msg = 'write ok'
   }
   catch(e) {
