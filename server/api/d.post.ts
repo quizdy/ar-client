@@ -22,9 +22,6 @@ export default defineEventHandler(async(e) => {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true })
   }
-  else {
-    ret.dir = false
-  }
 
   const aaa = path.join(__dirname, ROOT_DIR, 'a.txt');
 
@@ -36,7 +33,7 @@ export default defineEventHandler(async(e) => {
     ret.msg = JSON.stringify(e)
   }
   
-  if(fs.existsSync(path.join(__dirname, '../../public/aaa/bbb/test.txt'))) {ret.filessss =true}
+  if(fs.existsSync(path.join(__dirname, '../../public/a.txt'))) {ret.filessss =true}
   ret.aaa = aaa
 
   return {
