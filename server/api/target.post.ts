@@ -12,9 +12,8 @@ export default defineEventHandler(async(e) => {
   if (body === null) return {
     ret: false
   }
-  // body.target.pic = decodeBase64(body.venue, body.target)
-  // const ret = updateJson(body.venue, body.target)
-  const ret = body
+  body.target.pic = decodeBase64(body.venue, body.target)
+  const ret = updateJson(body.venue, body.target)
   return {
     ret: ret
   }

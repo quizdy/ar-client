@@ -4,9 +4,11 @@ import { createCommonJS } from 'mlly'
 
 const { __dirname } = createCommonJS(import.meta.url)
 
+const ROOT_DIR = '../../public/'
+
 export default defineEventHandler(async(e) => {
 
-  const dir = path.join(__dirname, '../../public/aaa/bbb/ccc')
+  const dir = path.join(__dirname, ROOT_DIR)
 
   let ret = {
     dir: false,
@@ -22,7 +24,7 @@ export default defineEventHandler(async(e) => {
     ret.dir = false
   }
 
-  const aaa = path.join(__dirname, '../../public/aaa/bbb/ccc', 'test.txt');
+  const aaa = path.join(__dirname, ROOT_DIR, 'test.txt');
   ret.aaa = aaa
 
 

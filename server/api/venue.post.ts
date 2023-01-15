@@ -27,6 +27,9 @@ export default defineEventHandler(async(e) => {
 })
 
 const updateJson = (venue: string): boolean => {
+
+  if (!fs.existsSync(JSONS_PATH)) fs.mkdirSync(JSONS_PATH, { recursive: true })
+
   const jsonPath = path.join(__dirname, JSONS_PATH, venue + '.json')
 
   const json = {
