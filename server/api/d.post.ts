@@ -4,7 +4,7 @@ import { createCommonJS } from 'mlly'
 
 const { __dirname } = createCommonJS(import.meta.url)
 
-const ROOT_DIR = '../../public/'
+const ROOT_DIR = '../../public/aaa/bbb'
 
 export default defineEventHandler(async(e) => {
 
@@ -12,13 +12,19 @@ export default defineEventHandler(async(e) => {
 
   let ret = {
     dir: false,
+    dir1: false,
+    dir2: false,
     aaa: '',
     msg: ""
   };
 
   if (!fs.existsSync(dir)) {
-    ret.dir = true
+
     fs.mkdirSync(dir, { recursive: true })
+
+    if(fs.existsSync(path.join(__dirname, '../../public/'))) {ret.dir =true}
+    if(fs.existsSync(path.join(__dirname, '../../public/aaa'))) {ret.dir1 =true}
+    if(fs.existsSync(path.join(__dirname, '../../public/aaa/bbb'))) {ret.dir2 =true}
   }
   else {
     ret.dir = false
