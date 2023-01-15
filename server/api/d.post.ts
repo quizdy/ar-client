@@ -14,28 +14,22 @@ export default defineEventHandler(async(e) => {
     dir: false,
     dir1: false,
     dir2: false,
-    dddd: false,
+    filessss: false,
     aaa: '',
     msg: ""
   };
 
   if (!fs.existsSync(dir)) {
 
-    // fs.mkdirSync(dir, { recursive: true })
-    const basePath = path.join(__dirname, ROOT_DIR)
-    mkDirByPathSync(basePath)
-
-    if(fs.existsSync(path.join(__dirname, '../../public/'))) {ret.dir =true}
-    if(fs.existsSync(path.join(__dirname, '../../public/aaa'))) {ret.dir1 =true}
-    if(fs.existsSync(path.join(__dirname, '../../public/aaa/bbb'))) {ret.dir2 =true}
+    fs.mkdirSync(dir, { recursive: true })
+    // const basePath = path.join(__dirname, ROOT_DIR)
+    // mkDirByPathSync(basePath)
   }
   else {
     ret.dir = false
   }
 
   const aaa = path.join(__dirname, ROOT_DIR, 'test.txt');
-  ret.aaa = aaa
-
 
   try {
     fs.writeFileSync(aaa, 'test_test_aaaaaaaaaaaaaaa')
@@ -44,6 +38,12 @@ export default defineEventHandler(async(e) => {
   catch(e) {
     ret.msg = JSON.stringify(e)
   }
+  
+  if(fs.existsSync(path.join(__dirname, '../../public/'))) {ret.dir =true}
+  if(fs.existsSync(path.join(__dirname, '../../public/aaa'))) {ret.dir1 =true}
+  if(fs.existsSync(path.join(__dirname, '../../public/aaa/bbb'))) {ret.dir2 =true}
+  if(fs.existsSync(path.join(__dirname, '../../public/aaa/bbb/test.txt'))) {ret.filessss =true}
+  ret.aaa = aaa
 
   return {
     ret: ret
