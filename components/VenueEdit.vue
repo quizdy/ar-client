@@ -95,7 +95,7 @@ const cancelVenue = () => {
 const updateVenue = async () => {
   const { data: result } = await useFetch("/api/venue", {
     method: "POST",
-    body: { method: "update", venue: venue },
+    body: { venue: venue },
   });
   dialog.value = false;
   emit("showVenueEdit", false);
