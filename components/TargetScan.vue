@@ -117,20 +117,32 @@ const refresh = (video: HTMLVideoElement, canvas: HTMLCanvasElement) => {
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-  const diff = resemble(props.image)
-    .compareTo(canvas.toDataURL())
-    .ignoreColors()
-    .onComplete((data) => {
-      pos.matchPercentage = 100 - data.misMatchPercentage;
-      progressColor.value =
-        pos.matchPercentage > 80 ? "deep-orange" : "light-blue";
-      // if (pos.matchPercentage > GAP) {
-      //   emits("nextTreasure");
-      // }
-    });
+  if (pos.frameId % 100000 === 0) {
+    const diff = resemble(props.image)
+      .compareTo(canvas.toDataURL())
+      .ignoreColors()
+      .onComplete((data) => {
+        pos.matchPercentage = 100 - data.misMatchPercentage;
+        progressColor.value =
+          pos.matchPercentage > 80 ? "deep-orange" : "light-blue";
+        // if (pos.matchPercentage > GAP) {
+        //   emits("nextTreasure");
+        // }
+      });
+  }
 
   pos.frameId = requestAnimationFrame(refresh.bind(null, video, canvas));
 };
+
+// const { data: res } = await useFetch("/api/GetImage", {
+//   method: "GET",
+//   params: { image: props.image },
+// });
+
+// console.log(res);
+
+// const blob = res.value?.image;
+// console.log(blob);
 </script>
 
 <style scoped lang="scss">

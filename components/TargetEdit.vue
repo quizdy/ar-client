@@ -106,6 +106,12 @@ const confirmTarget = () => {
     snackbar.show = true;
     return;
   }
+  if (!target.file) {
+    snackbar.msg = "image is invalid";
+    snackbar.color = "error";
+    snackbar.show = true;
+    return;
+  }
   dialog.value = true;
 };
 

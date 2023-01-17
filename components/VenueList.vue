@@ -2,7 +2,7 @@
   <div>
     <v-sheet>
       <v-card class="ma-2">
-        <template v-for="(v, i) in venues">
+        <template v-for="(v, i) in venues" :key="i">
           <v-list>
             <v-list-item :title="v" @click="selectedVenue(v)">
               <template v-slot:append>
@@ -50,7 +50,9 @@ const delVenue = async (venue: string) => {
   getVenues();
 };
 
-getVenues();
+nextTick(() => {
+  getVenues();
+});
 
 defineExpose({
   getVenues,

@@ -5,34 +5,30 @@
         v-show="currentComponent === 'targetMap'"
         ref="refTargetMap"
         :venue="venue"
-        :no="targets[0].no"
-        :title="targets[0].title"
-        :lat="targets[0].lat"
-        :lng="targets[0].lng"
-        :image="targets[0].image"
-        :comments="targets[0].comments"
+        :no="targets[pos].no"
+        :title="targets[pos].title"
+        :lat="targets[pos].lat"
+        :lng="targets[pos].lng"
+        :image="$config.API_URL + targets[pos].image"
+        :comments="targets[pos].comments"
       />
       <TargetScan
         v-show="currentComponent === 'targetScan'"
         @nextTreasure="nextTreasure"
         ref="refTargetScan"
         :venue="venue"
-        :no="targets[0].no"
-        :title="targets[0].title"
-        :lat="targets[0].lat"
-        :lng="targets[0].lng"
-        :image="targets[0].image"
-        :comments="targets[0].comments"
+        :no="targets[pos].no"
+        :title="targets[pos].title"
+        :lat="targets[pos].lat"
+        :lng="targets[pos].lng"
+        :image="$config.API_URL + targets[pos].image"
+        :comments="targets[pos].comments"
       />
       <TargetInfo
         v-show="currentComponent === ''"
         :venue="venue"
-        :no="targets[0].no"
-        :title="targets[0].title"
-        :lat="targets[0].lat"
-        :lng="targets[0].lng"
-        :image="targets[0].image"
-        :comments="targets[0].comments"
+        :pos="pos"
+        :targets="targets"
       />
     </v-main>
     <v-bottom-navigation v-model="currentComponent">
@@ -65,7 +61,7 @@ const currentComponent = ref("");
 const refTargetMap = ref();
 const refTargetScan = ref();
 
-let no = 0;
+let pos = 0;
 
 const chgPage = (pageName: string) => {
   if (pageName === "logout") {
@@ -83,8 +79,8 @@ const chgPage = (pageName: string) => {
 };
 
 const nextTreasure = () => {
-  if (no < targets.value.length) {
-    no++;
+  if (pos < targets.value.length) {
+    pos++;
     alert("Go to next point");
     chgPage("");
   } else {

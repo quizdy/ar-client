@@ -1,28 +1,28 @@
 {
-  "private": true,
-  "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "clean": "npm cache clean --force",
-    "devs": "npx nuxi dev --https --ssl-cert ./keys/192.168.17.63.pem --ssl-key ./keys/192.168.17.63-key.pem",
-    "nit": "npx nuxi dev --https --ssl-cert ./keys/nitech.pem --ssl-key ./keys/nitech-key.pem"
-  },
-  "devDependencies": {
-    "@types/google.maps": "^3.51.0",
-    "@types/resemblejs": "^4.1.0",
-    "nuxt": "3.0.0"
-  },
-  "dependencies": {
-    "@googlemaps/js-api-loader": "^1.15.1",
-    "@mdi/font": "^7.1.96",
-    "fs": "^0.0.1-security",
-    "mlly": "^1.1.0",
-    "path": "^0.12.7",
-    "resemblejs": "^4.1.0",
-    "sass": "^1.57.1",
-    "vuetify": "^3.1.0"
-  }
+    "private": true,
+    "scripts": {
+        "build": "nuxt build",
+        "dev": "nuxt dev",
+        "generate": "nuxt generate",
+        "preview": "nuxt preview",
+        "postinstall": "nuxt prepare",
+        "clean": "npm cache clean --force",
+        "start": "node .output/server/index.mjs"
+    },
+    "devDependencies": {
+        "@types/google.maps": "^3.51.0",
+        "@types/resemblejs": "^4.1.0",
+        "nuxt": "3.0.0"
+    },
+    "dependencies": {
+        "@googlemaps/js-api-loader": "^1.15.1",
+        "@mdi/font": "^7.1.96",
+        "fs": "^0.0.1-security",
+        "mlly": "^1.1.0",
+        "nuxt-swiper": "^0.1.9",
+        "path": "^0.12.7",
+        "resemblejs": "^4.1.0",
+        "sass": "^1.57.1",
+        "vuetify": "^3.1.0"
+    }
 }

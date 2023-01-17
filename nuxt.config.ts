@@ -3,7 +3,7 @@ export default {
   // srcDir: "./src",
   runtimeConfig: {
     public: {
-      API_URL: process.env.API_URL || "https://treasurehunting2023.azurewebsites.net",
+      API_URL: process.env.API_URL,
       GMAP_API_KEY: process.env.GMAP_API_KEY,
     },
   },
@@ -21,4 +21,9 @@ export default {
   build: {
     transpile: ['vuetify'],
   },
+  modules: [['nuxt-swiper', {
+    prefix: 'Swiper',
+    styleLang: 'css',
+    modules: ['navigation', 'pagination'], // all modules are imported by default
+  }]],
 };

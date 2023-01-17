@@ -2,13 +2,21 @@
   <div>
     <v-sheet>
       <v-card class="ma-2">
-        <template v-for="(t, i) in targets">
+        <template v-for="(t, i) in targets" :key="i">
           <v-list>
             <v-list-item
               :title="t.title"
               :prepend-avatar="$config.API_URL + t.image"
               @click="selectedTarget(t)"
             >
+              <template v-slot:append>
+                <v-btn
+                  color="grey-lighten-1"
+                  icon="mdi-delete"
+                  variant="text"
+                  @click.stop="delTarget(t)"
+                ></v-btn>
+              </template>
             </v-list-item>
           </v-list>
           <v-divider v-if="i < targets.length - 1" :key="i"></v-divider>
@@ -38,6 +46,15 @@ const getTargets = async () => {
   });
 
   targets.value = res.value?.targets;
+};
+
+const delTarget = async (target: any) => {
+  const { data: res } = await useFetch("/api/DeleteTarget", {
+    method: "POST",
+    body: { venue: props.venue, target: target },
+  });
+
+  getTargets();
 };
 
 nextTick(() => {
