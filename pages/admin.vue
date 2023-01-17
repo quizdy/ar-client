@@ -43,7 +43,6 @@
 </template>
 
 <script setup lang="ts">
-const $config = useRuntimeConfig();
 const venue = ref("");
 const target = ref();
 const venueEditDialog = ref(false);
@@ -71,7 +70,7 @@ const editTarget = (t: any) => {
 };
 
 const addTarget = async () => {
-  const { data: res } = await useFetch($config.API_URL + "/targets", {
+  const { data: res } = await useFetch("/api/GetTargets", {
     method: "GET",
     params: { venue: venue.value },
   });

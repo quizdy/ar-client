@@ -25,7 +25,6 @@ const props = defineProps<{
   venue: string;
 }>();
 
-const $config = useRuntimeConfig();
 const targets = ref([]);
 
 const selectedTarget = (t: any) => {
@@ -33,7 +32,7 @@ const selectedTarget = (t: any) => {
 };
 
 const getTargets = async () => {
-  const { data: res } = await useFetch($config.API_URL + "/targets", {
+  const { data: res } = await useFetch("/api/GetTargets", {
     method: "GET",
     params: { venue: props.venue },
   });
@@ -41,7 +40,9 @@ const getTargets = async () => {
   targets.value = res.value?.targets;
 };
 
-getTargets();
+nextTick(() => {
+  getTargets();
+});
 
 defineExpose({
   getTargets,

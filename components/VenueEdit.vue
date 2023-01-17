@@ -65,7 +65,6 @@ const propsVenue = defineProps<{
   venue: string;
 }>();
 
-const $config = useRuntimeConfig();
 const venue = ref(propsVenue.venue);
 const dialog = ref(false);
 const snackbar = reactive({
@@ -92,7 +91,7 @@ const cancelVenue = () => {
 };
 
 const updateVenue = async () => {
-  const { data: res } = await useFetch($config.API_URL + "/update-venue", {
+  const { data: res } = await useFetch("/api/UpdateVenue", {
     method: "POST",
     body: { venue: venue },
   });

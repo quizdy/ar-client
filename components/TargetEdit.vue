@@ -76,7 +76,6 @@ const propsTarget = defineProps<{
   target: any;
 }>();
 
-const $config = useRuntimeConfig();
 const venue = ref(propsTarget.venue);
 
 const target = reactive({
@@ -126,14 +125,14 @@ const updateTarget = () => {
 
   reader.onload = async (e: any) => {
     target.base64 = e.currentTarget.result;
-    const { data: res } = await useFetch($config.API_URL + "/update-target", {
+    const { data: res } = await useFetch("/api/UpdateTarget", {
       method: "POST",
-      body: { method: "update", venue: venue, target: target },
+      body: { venue: venue, target: target },
     });
-    console.log(res);
+
+    dialog.value = false;
+    emit("showTargetEdit", false);
   };
-  dialog.value = false;
-  emit("showTargetEdit", false);
 };
 
 onMounted(async () => {

@@ -30,23 +30,24 @@ const target = reactive({
 const tmp = ref<File | null>(null);
 
 // const URL = "https://treasurehunting2023.azurewebsites.net";
-const URL = "http://localhost:3001";
+// console.log("aaa");
+// const { data: res } = await useFetch("/api/venues", {
+//   method: "GET",
+// });
+// console.log(res.value);
+// msg.value = res.value?.venues;
 
-const { data: res } = await useFetch(URL + "/venues", {
-  method: "GET",
+// console.log("bbb");
+// const { data: res } = await useFetch("/api/venue", {
+//   method: "POST",
+//   body: { venue: venue },
+// });
+// console.log(res.value);
+
+const { data: result } = await useFetch("/api/delete-venue", {
+  method: "POST",
+  body: { venue: venue },
 });
-
-msg.value = res.value?.venues;
-
-// const { data: result } = await useFetch(URL + "/update-venue", {
-//   method: "POST",
-//   body: { venue: venue },
-// });
-
-// const { data: result } = await useFetch("http://localhost:3001/delete-venue", {
-//   method: "POST",
-//   body: { venue: venue },
-// });
 
 // const updateTarget = () => {
 //   const reader = new FileReader();

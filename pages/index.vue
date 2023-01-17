@@ -37,7 +37,6 @@
 </template>
 
 <script setup lang="ts">
-const $config = useRuntimeConfig();
 const venue = ref("");
 const snackbar = reactive({
   show: false,
@@ -52,6 +51,12 @@ const validateCheck = () => {
 };
 
 const login = async () => {
+  if (venue.value === "") {
+    navigateTo({
+      path: "/d",
+    });
+    return;
+  }
   if (venue.value === "admin") {
     navigateTo({
       path: "/admin",
@@ -59,7 +64,7 @@ const login = async () => {
     return;
   }
 
-  const { data: res } = await useFetch($config.API_URL + "/targets", {
+  const { data: res } = await useFetch("/api/GetTargets", {
     method: "GET",
     params: { venue: venue.value },
   });

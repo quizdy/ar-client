@@ -92,7 +92,7 @@ const nextTreasure = () => {
   }
 };
 
-const { data: res } = await useFetch("/api/targets", {
+const { data: res } = await useFetch("/api/GetTargets", {
   method: "GET",
   params: { venue: venue },
 });
