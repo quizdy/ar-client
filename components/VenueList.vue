@@ -27,26 +27,37 @@ const emitVenue = defineEmits<{
   (e: "editVenue", venue: string): void;
 }>();
 
+const $config = useRuntimeConfig();
 const venues = ref([]);
-
-const dialog = ref(false);
-
-const { data: res } = await useFetch("/api/venues", {
-  method: "GET",
-});
-
-venues.value = res.value?.venues;
 
 const selectedVenue = (venue: string) => {
   emitVenue("selectedVenue", venue);
 };
 
-const delVenue = async (venue: string) => {
-  const { data: result } = await useFetch("/api/venue", {
-    method: "POST",
-    body: { method: "del", venue: venue },
+const getVenues = async () => {
+  const { data: res } = await useFetch($config.API_URL + "/venues", {
+    method: "GET",
   });
+
+  venues.value = res.value?.venues;
 };
+
+const delVenue = async (venue: string) => {
+  const { data: res } = await useFetch($config.API_URL + "/delete-venue", {
+    method: "POST",
+    body: { venue: venue },
+  });
+
+  getVenues();
+};
+
+nextTick(() => {
+  getVenues();
+});
+
+defineExpose({
+  getVenues,
+});
 </script>
 
 <style scoped lang="scss"></style>

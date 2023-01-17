@@ -1,8 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default {
   // srcDir: "./src",
-  publicRuntimeConfig: {
-    gmapApiKey: process.env.GMAP_API_KEY,
+  runtimeConfig: {
+    public: {
+      API_URL: process.env.API_URL,
+      GMAP_API_KEY: process.env.GMAP_API_KEY,
+    },
   },
   app: {
     head: {
@@ -17,15 +20,5 @@ export default {
   css: ['vuetify/lib/styles/main.sass', "@mdi/font/css/materialdesignicons.css"],
   build: {
     transpile: ['vuetify'],
-  },
-  vite: {
-    define: {
-        "process.env.DEBUG": false
-    },
-    server: {
-        watch: {
-            usePolling: true
-        }
-    },
   },
 };

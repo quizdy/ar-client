@@ -15,7 +15,7 @@ const props = defineProps<{
   title: string;
   lat: number;
   lng: number;
-  pic: string;
+  image: string;
   comments: string;
 }>();
 
@@ -46,7 +46,7 @@ onMounted(async () => {
   pos.accuracy = position.coords.accuracy;
 
   const loader = new Loader({
-    //apiKey: $config.gmapApiKey,
+    //apiKey: $config.GMAP_API_KEY,
     apiKey: "AIzaSyCYsLDv3eHNGZ-HFcXUjoA5r442Aj10ND0",
     version: "weekly",
     libraries: ["places"],

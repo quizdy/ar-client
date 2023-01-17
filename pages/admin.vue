@@ -15,7 +15,11 @@
       >
     </v-app-bar>
     <v-main>
-      <VenueList v-if="!venue" @selectedVenue="selectedVenue" />
+      <VenueList
+        v-if="!venue"
+        @selectedVenue="selectedVenue"
+        ref="refVenueList"
+      />
       <TargetList
         v-if="venue"
         :venue="venue"
@@ -25,11 +29,7 @@
     </v-main>
     <client-only>
       <v-dialog v-model="venueEditDialog" persistent>
-        <VenueEdit
-          :venue="venue"
-          @showVenueEdit="showVenueEdit"
-          ref="refVenueEdit"
-        />
+        <VenueEdit :venue="venue" @showVenueEdit="showVenueEdit" />
       </v-dialog>
       <v-dialog v-model="targetEditDialog" persistent>
         <TargetEdit
@@ -43,21 +43,22 @@
 </template>
 
 <script setup lang="ts">
+const $config = useRuntimeConfig();
 const venue = ref("");
 const target = ref();
 const venueEditDialog = ref(false);
 const targetEditDialog = ref(false);
+const refVenueList = ref();
 const refTargetList = ref();
-const refVenueEdit = ref();
 
 const showVenueEdit = (s: boolean) => {
   venueEditDialog.value = s;
-  if (!s) location.reload();
+  if (!s) refVenueList.value.getVenues();
 };
 
 const showTargetEdit = (s: boolean) => {
   targetEditDialog.value = s;
-  if (!s) location.reload();
+  if (!s) refTargetList.value.getTargets();
 };
 
 const selectedVenue = (v: string) => {
@@ -70,7 +71,7 @@ const editTarget = (t: any) => {
 };
 
 const addTarget = async () => {
-  const { data: res } = await useFetch("/api/targets", {
+  const { data: res } = await useFetch($config.API_URL + "/targets", {
     method: "GET",
     params: { venue: venue.value },
   });
@@ -80,7 +81,7 @@ const addTarget = async () => {
     title: "",
     lat: 0.0,
     lng: 0.0,
-    pic: "",
+    image: "",
     comments: "",
   };
   showTargetEdit(true);

@@ -9,7 +9,7 @@
         :title="targets[0].title"
         :lat="targets[0].lat"
         :lng="targets[0].lng"
-        :pic="targets[0].pic"
+        :image="targets[0].image"
         :comments="targets[0].comments"
       />
       <TargetScan
@@ -21,7 +21,7 @@
         :title="targets[0].title"
         :lat="targets[0].lat"
         :lng="targets[0].lng"
-        :pic="targets[0].pic"
+        :image="targets[0].image"
         :comments="targets[0].comments"
       />
       <TargetInfo
@@ -31,7 +31,7 @@
         :title="targets[0].title"
         :lat="targets[0].lat"
         :lng="targets[0].lng"
-        :pic="targets[0].pic"
+        :image="targets[0].image"
         :comments="targets[0].comments"
       />
     </v-main>

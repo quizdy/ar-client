@@ -4,8 +4,8 @@
       <video id="video" autoplay muted playsinline></video>
       <canvas id="canvas"></canvas>
       <v-img
-        id="pic"
-        :src="props.pic"
+        id="image"
+        :src="props.image"
         :style="{ opacity: opacity / 100 }"
       ></v-img>
     </div>
@@ -39,7 +39,7 @@ const props = defineProps<{
   title: string;
   lat: number;
   lng: number;
-  pic: string;
+  image: string;
   comments: string;
 }>();
 
@@ -117,7 +117,7 @@ const refresh = (video: HTMLVideoElement, canvas: HTMLCanvasElement) => {
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-  const diff = resemble(props.pic)
+  const diff = resemble(props.image)
     .compareTo(canvas.toDataURL())
     .ignoreColors()
     .onComplete((data) => {
@@ -145,7 +145,7 @@ const refresh = (video: HTMLVideoElement, canvas: HTMLCanvasElement) => {
 }
 
 #canvas,
-#pic {
+#image {
   position: absolute;
   top: 0;
   left: 0;

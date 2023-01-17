@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-card class="mx-auto" max-width="600">
-      <v-img :src="props.pic"></v-img>
+      <v-img :src="props.image"></v-img>
       <v-card-title>{{ props.title }} </v-card-title>
       <v-card-subtitle>
         {{ props.comments }}
@@ -36,7 +36,7 @@ const props = defineProps<{
   title: string;
   lat: number;
   lng: number;
-  pic: string;
+  image: string;
   comments: string;
 }>();
 

@@ -6,7 +6,7 @@
           <v-list>
             <v-list-item
               :title="t.title"
-              :prepend-avatar="t.pic"
+              :prepend-avatar="$config.API_URL + t.image"
               @click="selectedTarget(t)"
             >
             </v-list-item>
@@ -25,18 +25,27 @@ const props = defineProps<{
   venue: string;
 }>();
 
+const $config = useRuntimeConfig();
 const targets = ref([]);
-
-const { data: res } = await useFetch("/api/targets", {
-  method: "GET",
-  params: { venue: props.venue },
-});
-
-targets.value = res.value?.targets;
 
 const selectedTarget = (t: any) => {
   emitTarget("editTarget", t);
 };
+
+const getTargets = async () => {
+  const { data: res } = await useFetch($config.API_URL + "/targets", {
+    method: "GET",
+    params: { venue: props.venue },
+  });
+
+  targets.value = res.value?.targets;
+};
+
+getTargets();
+
+defineExpose({
+  getTargets,
+});
 </script>
 
 <style scoped lang="scss"></style>
