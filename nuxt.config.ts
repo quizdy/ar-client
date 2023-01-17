@@ -3,7 +3,7 @@ export default {
   // srcDir: "./src",
   runtimeConfig: {
     public: {
-      API_URL: process.env.API_URL,
+      API_URL: process.env.API_URL || 'http://localhost:3001',
       GMAP_API_KEY: process.env.GMAP_API_KEY,
     },
   },
@@ -20,5 +20,16 @@ export default {
   css: ['vuetify/lib/styles/main.sass', "@mdi/font/css/materialdesignicons.css"],
   build: {
     transpile: ['vuetify'],
+  },
+  vite: {
+    server: {
+      proxy: {
+        "/api/": {
+          target: process.env.API_URL || 'http://localhost:3001',
+          changeOrigin: true,
+          secure: false,
+        },
+      }
+    }
   },
 };

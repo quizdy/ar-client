@@ -35,7 +35,7 @@ const selectedVenue = (venue: string) => {
 };
 
 const getVenues = async () => {
-  const { data: res } = await useFetch($config.API_URL + "/venues", {
+  const { data: res } = await useFetch("/api/venues", {
     method: "GET",
   });
 
