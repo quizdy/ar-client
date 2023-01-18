@@ -5,24 +5,16 @@
         v-show="currentComponent === 'targetMap'"
         ref="refTargetMap"
         :venue="venue"
-        :no="targets[pos].no"
-        :title="targets[pos].title"
-        :lat="targets[pos].lat"
-        :lng="targets[pos].lng"
-        :image="targets[pos].image"
-        :comments="targets[pos].comments"
+        :pos="pos"
+        :targets="targets"
       />
       <TargetScan
         v-show="currentComponent === 'targetScan'"
         @nextTreasure="nextTreasure"
         ref="refTargetScan"
         :venue="venue"
-        :no="targets[pos].no"
-        :title="targets[pos].title"
-        :lat="targets[pos].lat"
-        :lng="targets[pos].lng"
-        :image="targets[pos].image"
-        :comments="targets[pos].comments"
+        :pos="pos"
+        :targets="targets"
       />
       <TargetInfo
         v-show="currentComponent === ''"

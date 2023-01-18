@@ -5,7 +5,7 @@
       <canvas id="canvas"></canvas>
       <v-img
         id="image"
-        :src="$config.API_URL + props.image"
+        :src="$config.API_URL + props.targets[props.pos].image"
         :style="{ opacity: opacity / 100 }"
       ></v-img>
     </div>
@@ -36,11 +36,8 @@ interface DeviceOrientationEventiOS extends DeviceOrientationEvent {
 
 const props = defineProps<{
   venue: string;
-  title: string;
-  lat: number;
-  lng: number;
-  image: string;
-  comments: string;
+  pos: number;
+  targets: any;
 }>();
 
 const GAP = 10;
@@ -104,7 +101,7 @@ const startVideo = async (): Promise<void> => {
 
   const { data: res } = await useFetch("/api/GetImage", {
     method: "GET",
-    params: { image: props.image },
+    params: { image: props.targets[props.pos].image },
   });
 
   const base64 = res.value?.base64;
@@ -123,12 +120,13 @@ const stopVideo = () => {
 const refresh = (
   video: HTMLVideoElement,
   canvas: HTMLCanvasElement,
-  base64: string
+  base64: string | undefined
 ) => {
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-  if (pos.frameId % 100000 === 0) {
+  if (pos.frameId % 128 === 0) {
+    if (typeof base64 === "undefined") return;
     const diff = resemble(base64)
       .compareTo(canvas.toDataURL())
       .ignoreColors()

@@ -21,11 +21,8 @@ import { Loader } from "@googlemaps/js-api-loader";
 
 const props = defineProps<{
   venue: string;
-  title: string;
-  lat: number;
-  lng: number;
-  image: string;
-  comments: string;
+  pos: number;
+  targets: any;
 }>();
 
 const snackbar = reactive({
@@ -36,7 +33,7 @@ const snackbar = reactive({
 });
 
 const $config = useRuntimeConfig();
-const gmap = ref<HTMLElement>();
+const gmap = ref<google.maps.Map>();
 const distance = ref<number>(0);
 const pos = reactive({
   lat: 0.0,
@@ -80,7 +77,7 @@ onMounted(async () => {
   });
 
   google.maps.event.addListener(gmap.value, "zoom_changed", () => {
-    pos.zoom = gmap.value.getZoom();
+    pos.zoom = gmap?.value.getZoom();
   });
 
   navigator.geolocation.watchPosition(watchPosition, (e: any) => {
@@ -100,20 +97,48 @@ const watchPosition = (position: any) => {
   const currentMarker = new google.maps.Marker({ position: currentPos });
   currentMarker.setMap(gmap.value);
 
-  const icon = {
-    url: "/box.png",
-    scaledSize: new google.maps.Size(40, 30),
-    origin: new google.maps.Point(0, 0),
-    anchor: new google.maps.Point(0, 0),
-  };
+  const icons = [
+    {
+      url: "/treasure1.png",
+      scaledSize: new google.maps.Size(40, 30),
+      origin: new google.maps.Point(0, 0),
+      anchor: new google.maps.Point(0, 0),
+    },
+    {
+      url: "/treasure2.png",
+      scaledSize: new google.maps.Size(40, 30),
+      origin: new google.maps.Point(0, 0),
+      anchor: new google.maps.Point(0, 0),
+    },
+    {
+      url: "/treasure3.png",
+      scaledSize: new google.maps.Size(40, 30),
+      origin: new google.maps.Point(0, 0),
+      anchor: new google.maps.Point(0, 0),
+    },
+    {
+      url: "/treasure4.png",
+      scaledSize: new google.maps.Size(40, 30),
+      origin: new google.maps.Point(0, 0),
+      anchor: new google.maps.Point(0, 0),
+    },
+    {
+      url: "/treasure5.png",
+      scaledSize: new google.maps.Size(40, 30),
+      origin: new google.maps.Point(0, 0),
+      anchor: new google.maps.Point(0, 0),
+    },
+  ];
 
-  const targetPos = new google.maps.LatLng(props.lat, props.lng);
-  const targetMarker = new google.maps.Marker({
-    position: targetPos,
-    icon: icon,
-    animation: google.maps.Animation.DROP,
+  props.targets.forEach((target: any, i: number) => {
+    const targetMarker = new google.maps.Marker({
+      position: new google.maps.LatLng(target.lat, target.lng),
+      icon: icons[i],
+      animation: google.maps.Animation.DROP,
+    });
+
+    targetMarker.setMap(gmap.value);
   });
-  targetMarker.setMap(gmap.value);
 
   new google.maps.Circle({
     map: gmap.value,
@@ -130,7 +155,10 @@ const watchPosition = (position: any) => {
 
   if (typeof google.maps.geometry !== "undefined") {
     distance.value = google.maps.geometry.spherical.computeDistanceBetween(
-      targetPos,
+      new google.maps.LatLng(
+        props.targets[props.pos].lat,
+        props.targets[props.pos].lng
+      ),
       currentPos
     );
   }

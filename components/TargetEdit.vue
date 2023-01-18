@@ -126,6 +126,13 @@ const onTargetFileChanged = (e: Event) => {
 };
 
 const updateTarget = () => {
+  if (target.file === null) {
+    snackbar.msg = "image is invalid";
+    snackbar.color = "error";
+    snackbar.show = true;
+    return;
+  }
+
   const reader = new FileReader();
   reader.readAsDataURL(target.file);
 
@@ -142,19 +149,17 @@ const updateTarget = () => {
 };
 
 onMounted(async () => {
-  if (
-    !navigator.geolocation ||
-    !navigator.geolocation.getCurrentPosition ||
-    !navigator.geolocation.watchPosition
-  )
+  if (!navigator.geolocation || !navigator.geolocation.getCurrentPosition)
     return;
 
   const position: any = await new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(resolve, reject);
   });
 
-  target.lat = position.coords.latitude;
-  target.lng = position.coords.longitude;
+  if (target.lat === 0 && target.lng === 0) {
+    target.lat = position.coords.latitude;
+    target.lng = position.coords.longitude;
+  }
 });
 </script>
 

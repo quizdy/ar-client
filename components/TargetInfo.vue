@@ -2,7 +2,7 @@
   <div>
     <Swiper
       :slides-per-view="1"
-      :loop="true"
+      :loop="false"
       :effect="'creative'"
       :autoplay="{
         delay: 8000,
@@ -68,11 +68,11 @@
 <script setup lang="ts">
 const props = defineProps<{
   venue: string;
+  pos: number;
   targets: any;
 }>();
 
 const show = ref<boolean>(false);
-const pos = ref(0);
 </script>
 
 <style scoped lang="scss"></style>
