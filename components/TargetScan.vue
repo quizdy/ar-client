@@ -5,7 +5,7 @@
       <canvas id="canvas"></canvas>
       <v-img
         id="image"
-        :src="props.image"
+        :src="$config.API_URL + props.image"
         :style="{ opacity: opacity / 100 }"
       ></v-img>
     </div>
@@ -73,7 +73,6 @@ const pos = reactive({
 
 const progressColor = ref("light-blue");
 const opacity = ref(0);
-const scan = ref();
 
 const startVideo = async (): Promise<void> => {
   if (typeof window !== "object") return;
@@ -103,22 +102,34 @@ const startVideo = async (): Promise<void> => {
   video.srcObject = stream;
   video.play();
 
-  refresh(video, canvas);
+  const { data: res } = await useFetch("/api/GetImage", {
+    method: "GET",
+    params: { image: props.image },
+  });
+
+  const base64 = res.value?.base64;
+  console.log(base64);
+
+  refresh(video, canvas, base64);
 };
 
 const stopVideo = () => {
   const video = document.getElementsByTagName("video")[0];
   video.pause();
   video.srcObject = null;
-  clearInterval(scan.value);
+  clearInterval(pos.frameId);
 };
 
-const refresh = (video: HTMLVideoElement, canvas: HTMLCanvasElement) => {
+const refresh = (
+  video: HTMLVideoElement,
+  canvas: HTMLCanvasElement,
+  base64: string
+) => {
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
   if (pos.frameId % 100000 === 0) {
-    const diff = resemble(props.image)
+    const diff = resemble(base64)
       .compareTo(canvas.toDataURL())
       .ignoreColors()
       .onComplete((data) => {
@@ -131,18 +142,10 @@ const refresh = (video: HTMLVideoElement, canvas: HTMLCanvasElement) => {
       });
   }
 
-  pos.frameId = requestAnimationFrame(refresh.bind(null, video, canvas));
+  pos.frameId = requestAnimationFrame(
+    refresh.bind(null, video, canvas, base64)
+  );
 };
-
-// const { data: res } = await useFetch("/api/GetImage", {
-//   method: "GET",
-//   params: { image: props.image },
-// });
-
-// console.log(res);
-
-// const blob = res.value?.image;
-// console.log(blob);
 </script>
 
 <style scoped lang="scss">

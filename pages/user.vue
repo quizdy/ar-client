@@ -9,7 +9,7 @@
         :title="targets[pos].title"
         :lat="targets[pos].lat"
         :lng="targets[pos].lng"
-        :image="$config.API_URL + targets[pos].image"
+        :image="targets[pos].image"
         :comments="targets[pos].comments"
       />
       <TargetScan
@@ -21,7 +21,7 @@
         :title="targets[pos].title"
         :lat="targets[pos].lat"
         :lng="targets[pos].lng"
-        :image="$config.API_URL + targets[pos].image"
+        :image="targets[pos].image"
         :comments="targets[pos].comments"
       />
       <TargetInfo

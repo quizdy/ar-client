@@ -6,6 +6,5 @@ export default defineEventHandler(async (e) => {
     method: "GET",
     params: { venue: query.venue },
   })
-  console.log('targets', res)
   return res
 })

@@ -3,7 +3,7 @@ export default {
   // srcDir: "./src",
   runtimeConfig: {
     public: {
-      API_URL: process.env.API_URL,
+      API_URL: process.env.API_URL || "http://localhost:3001",
       GMAP_API_KEY: process.env.GMAP_API_KEY,
     },
   },

@@ -19,15 +19,12 @@
       }"
     >
       <SwiperSlide v-for="(t, i) in props.targets" :key="i">
-        <v-sheet
-          class="mx-auto"
-          max-height="calc(100dvh - 60px)"
-          max-width="600"
-        >
+        <v-sheet class="mx-auto" height="calc(100dvh - 56px)" max-width="600">
           <v-img
             class="mx-auto"
-            :src="t.image"
-            max-height="calc(80dvh - 60px)"
+            :src="$config.API_URL + t.image"
+            max-height="calc(100dvh - 56px)"
+            max-width="600"
           ></v-img>
           {{ i }}
           {{ t.title }}

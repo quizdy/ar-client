@@ -4,6 +4,15 @@
     <v-card class="pa-2">
       <v-text-field solo readonly>{{ distance }} km</v-text-field>
     </v-card>
+    <client-only>
+      <v-snackbar
+        v-model="snackbar.show"
+        :timeout="snackbar.timeout"
+        :color="snackbar.color"
+      >
+        {{ snackbar.msg }}
+      </v-snackbar>
+    </client-only>
   </div>
 </template>
 
@@ -19,9 +28,16 @@ const props = defineProps<{
   comments: string;
 }>();
 
+const snackbar = reactive({
+  show: false,
+  timeout: 2000,
+  color: "",
+  msg: "",
+});
+
 const $config = useRuntimeConfig();
 const gmap = ref<HTMLElement>();
-const distance = ref<number>();
+const distance = ref<number>(0);
 const pos = reactive({
   lat: 0.0,
   lng: 0.0,
@@ -46,8 +62,7 @@ onMounted(async () => {
   pos.accuracy = position.coords.accuracy;
 
   const loader = new Loader({
-    //apiKey: $config.GMAP_API_KEY,
-    apiKey: "AIzaSyCYsLDv3eHNGZ-HFcXUjoA5r442Aj10ND0",
+    apiKey: $config.GMAP_API_KEY || "AIzaSyCYsLDv3eHNGZ-HFcXUjoA5r442Aj10ND0",
     version: "weekly",
     libraries: ["places"],
   });
@@ -68,9 +83,12 @@ onMounted(async () => {
     pos.zoom = gmap.value.getZoom();
   });
 
-  navigator.geolocation.watchPosition(watchPosition, (e: any) =>
-    console.log(e)
-  );
+  navigator.geolocation.watchPosition(watchPosition, (e: any) => {
+    (snackbar.msg = "watchPosition error"), e;
+    snackbar.color = "error";
+    snackbar.show = true;
+    return;
+  });
 });
 
 const watchPosition = (position: any) => {
@@ -93,6 +111,7 @@ const watchPosition = (position: any) => {
   const targetMarker = new google.maps.Marker({
     position: targetPos,
     icon: icon,
+    animation: google.maps.Animation.DROP,
   });
   targetMarker.setMap(gmap.value);
 
@@ -108,28 +127,13 @@ const watchPosition = (position: any) => {
   });
 
   gmap.value.panTo(currentPos);
-  distance.value = getDistance(props.lat, props.lng, pos.lat, pos.lng);
 
-  console.log(props.title, pos.lat, pos.lng, distance.value);
-};
-
-const getDistance = (
-  lat1: number,
-  lng1: number,
-  lat2: number,
-  lng2: number
-) => {
-  lat1 *= Math.PI / 180;
-  lng1 *= Math.PI / 180;
-  lat2 *= Math.PI / 180;
-  lng2 *= Math.PI / 180;
-  return (
-    6371 *
-    Math.acos(
-      Math.cos(lat1) * Math.cos(lat2) * Math.cos(lng2 - lng1) +
-        Math.sin(lat1) * Math.sin(lat2)
-    )
-  );
+  if (typeof google.maps.geometry !== "undefined") {
+    distance.value = google.maps.geometry.spherical.computeDistanceBetween(
+      targetPos,
+      currentPos
+    );
+  }
 };
 
 const beep = (tempo: number, volume: number) => {
