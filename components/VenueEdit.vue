@@ -11,7 +11,7 @@
           prepend-icon="mdi-check-bold"
           rounded="pill"
           variant="outlined"
-          @click="confirmVenue"
+          @click="updateVenue"
           >登録</v-btn
         >
         <v-btn

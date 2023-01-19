@@ -22,7 +22,13 @@
           ><p class="text-caption">{{ Math.ceil(value) }} %</p>
         </template></v-progress-linear
       >
-      <v-slider max="100" min="0" color="blue" v-model="opacity"></v-slider>
+      <v-slider
+        class="mx-4"
+        max="100"
+        min="0"
+        color="blue"
+        v-model="opacity"
+      ></v-slider>
     </v-card>
     <client-only>
       <v-snackbar

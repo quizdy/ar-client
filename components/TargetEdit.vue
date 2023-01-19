@@ -4,34 +4,53 @@
       <v-card-title>
         <span class="headline">ターゲットの登録</span>
       </v-card-title>
-      <v-text-field readonly v-model="venue"></v-text-field>
-      <v-text-field readonly v-model="target.no"></v-text-field>
-      <v-text-field v-model="target.title"></v-text-field>
-      <v-file-input
-        accept="image/png, image/jpeg, image/bmp"
-        placeholder="Pick a picture"
-        prepend-icon="mdi-camera"
-        @change="onTargetFileChanged"
-      ></v-file-input>
-      <v-text-field v-model="target.lat"></v-text-field>
-      <v-text-field v-model="target.lng"></v-text-field>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn
-          prepend-icon="mdi-check-bold"
-          rounded="pill"
-          variant="outlined"
-          @click="confirmTarget"
-          >登録</v-btn
-        >
-        <v-btn
-          prepend-icon="mdi-close-thick"
-          rounded="pill"
-          variant="outlined"
-          @click="emit('showTargetEdit', false)"
-          >キャンセル</v-btn
-        >
-      </v-card-actions>
+      <v-row>
+        <v-col>
+          <v-text-field readonly v-model="target.no"></v-text-field>
+        </v-col>
+        <v-col>
+          <v-text-field v-model="target.title"></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <v-file-input
+            accept="image/png, image/jpeg, image/bmp"
+            placeholder="Pick a picture"
+            prepend-icon="mdi-camera"
+            @change="onTargetFileChanged"
+          ></v-file-input>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <v-text-field v-model="target.lat"></v-text-field>
+        </v-col>
+        <v-col>
+          <v-text-field v-model="target.lng"></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              prepend-icon="mdi-check-bold"
+              rounded="pill"
+              variant="outlined"
+              @click="confirmTarget"
+              >登録</v-btn
+            >
+            <v-btn
+              prepend-icon="mdi-close-thick"
+              rounded="pill"
+              variant="outlined"
+              @click="emit('showTargetEdit', false)"
+              >キャンセル</v-btn
+            >
+          </v-card-actions>
+        </v-col>
+      </v-row>
     </v-card>
     <client-only>
       <v-dialog v-model="dialog" persistent>

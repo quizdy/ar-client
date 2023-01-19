@@ -57,9 +57,7 @@ const delTarget = async (target: any) => {
   getTargets();
 };
 
-nextTick(() => {
-  getTargets();
-});
+getTargets();
 
 defineExpose({
   getTargets,
