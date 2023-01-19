@@ -2,7 +2,7 @@
   <v-container>
     <v-card class="d-flex flex-column justify-center pa-2">
       <v-card-title>
-        <span class="headline">ポイント登録</span>
+        <span class="headline">ターゲットの登録</span>
       </v-card-title>
       <v-text-field readonly v-model="venue"></v-text-field>
       <v-text-field readonly v-model="target.no"></v-text-field>
