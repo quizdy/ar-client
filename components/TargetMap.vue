@@ -100,31 +100,31 @@ const watchPosition = (position: any) => {
   const icons = [
     {
       url: "/treasure1.png",
-      scaledSize: new google.maps.Size(40, 30),
+      scaledSize: new google.maps.Size(30, 30),
       origin: new google.maps.Point(0, 0),
       anchor: new google.maps.Point(0, 0),
     },
     {
       url: "/treasure2.png",
-      scaledSize: new google.maps.Size(40, 30),
+      scaledSize: new google.maps.Size(30, 30),
       origin: new google.maps.Point(0, 0),
       anchor: new google.maps.Point(0, 0),
     },
     {
       url: "/treasure3.png",
-      scaledSize: new google.maps.Size(40, 30),
+      scaledSize: new google.maps.Size(30, 30),
       origin: new google.maps.Point(0, 0),
       anchor: new google.maps.Point(0, 0),
     },
     {
       url: "/treasure4.png",
-      scaledSize: new google.maps.Size(40, 30),
+      scaledSize: new google.maps.Size(30, 30),
       origin: new google.maps.Point(0, 0),
       anchor: new google.maps.Point(0, 0),
     },
     {
       url: "/treasure5.png",
-      scaledSize: new google.maps.Size(40, 30),
+      scaledSize: new google.maps.Size(30, 30),
       origin: new google.maps.Point(0, 0),
       anchor: new google.maps.Point(0, 0),
     },
@@ -134,7 +134,6 @@ const watchPosition = (position: any) => {
     const targetMarker = new google.maps.Marker({
       position: new google.maps.LatLng(target.lat, target.lng),
       icon: icons[i],
-      animation: google.maps.Animation.DROP,
     });
 
     targetMarker.setMap(gmap.value);

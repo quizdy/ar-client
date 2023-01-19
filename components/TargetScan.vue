@@ -24,6 +24,15 @@
       >
       <v-slider max="100" min="0" color="blue" v-model="opacity"></v-slider>
     </v-card>
+    <client-only>
+      <v-snackbar
+        location="top"
+        v-model="snackbar.show"
+        :color="snackbar.color"
+      >
+        <div style="text-align: center; width: 100%">{{ snackbar.msg }}</div>
+      </v-snackbar>
+    </client-only>
   </div>
 </template>
 
@@ -39,6 +48,12 @@ const props = defineProps<{
   pos: number;
   targets: any;
 }>();
+
+const snackbar = reactive({
+  show: false,
+  color: "",
+  msg: "",
+});
 
 const GAP = 10;
 
@@ -105,8 +120,6 @@ const startVideo = async (): Promise<void> => {
   });
 
   const base64 = res.value?.base64;
-  console.log(base64);
-
   refresh(video, canvas, base64);
 };
 
@@ -117,6 +130,8 @@ const stopVideo = () => {
   clearInterval(pos.frameId);
 };
 
+let count: number = 0;
+
 const refresh = (
   video: HTMLVideoElement,
   canvas: HTMLCanvasElement,
@@ -125,7 +140,7 @@ const refresh = (
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-  if (pos.frameId % 128 === 0) {
+  if (pos.frameId % 96 === 0) {
     if (typeof base64 === "undefined") return;
     const diff = resemble(base64)
       .compareTo(canvas.toDataURL())
@@ -134,9 +149,31 @@ const refresh = (
         pos.matchPercentage = 100 - data.misMatchPercentage;
         progressColor.value =
           pos.matchPercentage > 80 ? "deep-orange" : "light-blue";
-        // if (pos.matchPercentage > GAP) {
-        //   emits("nextTreasure");
-        // }
+        if (pos.matchPercentage > GAP) {
+          console.log(count);
+          if (count === 1) {
+            snackbar.msg = "3";
+            snackbar.color = "info";
+            snackbar.show = true;
+          }
+          if (count === 2) {
+            snackbar.msg = "2";
+            snackbar.color = "success";
+          }
+          if (count === 3) {
+            snackbar.msg = "1";
+            snackbar.color = "error";
+          }
+          if (count === 4) {
+            snackbar.show = false;
+            stopVideo();
+            emits("nextTreasure");
+          }
+          count++;
+        } else {
+          snackbar.show = false;
+          count = 0;
+        }
       });
   }
 
@@ -166,5 +203,9 @@ const refresh = (
   padding: 0;
   height: 100%;
   width: 100%;
+}
+
+.snackbr {
+  text-align: center;
 }
 </style>

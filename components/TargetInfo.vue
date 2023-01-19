@@ -19,15 +19,21 @@
       }"
     >
       <SwiperSlide v-for="(t, i) in props.targets" :key="i">
-        <v-sheet class="mx-auto" height="calc(100dvh - 56px)" max-width="600">
-          <v-img
-            class="mx-auto"
+        <v-sheet max-width="800">
+          <img
             :src="$config.API_URL + t.image"
-            max-height="calc(100dvh - 56px)"
-            max-width="600"
-          ></v-img>
-          {{ i }}
-          {{ t.title }}
+            :height="size.height"
+            style="object-fit: cover"
+          />
+          <!-- <v-img
+            :src="$config.API_URL + t.image"
+            :min-height="size.height"
+            :min-width="size.width"
+            :max-height="size.height"
+            :max-width="size.width"
+          ></v-img> -->
+          <!-- {{ i }}
+          {{ t.title }} -->
         </v-sheet>
       </SwiperSlide>
     </Swiper>
@@ -72,7 +78,15 @@ const props = defineProps<{
   targets: any;
 }>();
 
-const show = ref<boolean>(false);
+const size = reactive({
+  height: 0,
+  width: 0,
+});
+
+onMounted(() => {
+  size.height = document.documentElement.clientHeight - 64;
+  size.width = document.documentElement.clientWidth;
+});
 </script>
 
 <style scoped lang="scss"></style>

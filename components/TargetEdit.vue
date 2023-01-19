@@ -13,8 +13,8 @@
         prepend-icon="mdi-camera"
         @change="onTargetFileChanged"
       ></v-file-input>
-      <v-text-field readonly v-model="target.lat"></v-text-field>
-      <v-text-field readonly v-model="target.lng"></v-text-field>
+      <v-text-field v-model="target.lat"></v-text-field>
+      <v-text-field v-model="target.lng"></v-text-field>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn
